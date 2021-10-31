@@ -4,18 +4,19 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-//table
 @Entity
 @Data
-public class Post {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="post_id",columnDefinition="INT",insertable=false, updatable=false)
+    @Column(name="comment_id")
     private Integer id;
-    private String title;
-    private String content;
     private Integer user_id;
-    private Integer apt_id;
+    private String comment;
+
+    @ManyToOne
+    @JoinColumn(name="post_id")
+    private Post post;
 
 }
