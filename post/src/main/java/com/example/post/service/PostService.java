@@ -13,10 +13,10 @@ public class PostService {
     @Autowired
     private PostRepository postRepository;
 
-    public void write(Post post){
+    public Post write(Post post){
 
         postRepository.save(post);
-
+        return post;
     }
 
     public Page<Post> totalpostlist(Pageable pageable){
