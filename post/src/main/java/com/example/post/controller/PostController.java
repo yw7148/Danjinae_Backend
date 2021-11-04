@@ -31,7 +31,6 @@ public class PostController {
     //게시물 전체 리스트
     @GetMapping("/totalpostlist/{keyword}")
     public Page<Post> totalPostList(Model model, @PageableDefault(page=0,size=10,sort="id",direction= Sort.Direction.DESC) Pageable pageable,@PathVariable String keyword){
-
         Page<Post> list= null;
 
         if(keyword==null){
@@ -51,7 +50,7 @@ public class PostController {
         model.addAttribute("endPage",endPage);
         return list;
     }
-
+    
     //선택된 게시물 불러오기
     @GetMapping("/getpost/{id}")
     public Post getPost(Model model,@PathVariable Integer id){
