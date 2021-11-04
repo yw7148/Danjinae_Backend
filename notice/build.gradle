@@ -23,15 +23,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.5.5'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-<<<<<<< HEAD
 	implementation 'com.s24.tomcat:tomcat-cache-realm:0.1.0'
 	implementation 'org.dbflute.tomcat:tomcat-boot:0.7.9'
 	implementation 'org.springframework:spring-web:5.3.11'
 	implementation 'cn.xnatural.jpa:jpa:1.0.6'
 	implementation 'com.holon-platform.jpa:documentation-jpa:5.5.0'
-=======
 	implementation 'mysql:mysql-connector-java'
->>>>>>> 372251536b0116ce0d925c2f43b8e5bbecb8f82f
+	implementation 'mysql:mysql-connector-java'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 	annotationProcessor 'org.projectlombok:lombok'
