@@ -1,3 +1,4 @@
+
 package com.example.notice.repository;
 
 import com.example.notice.entity.Notice;

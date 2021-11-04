@@ -17,6 +17,4 @@ public class NoticeController {
     public Notice Addnotice(@RequestBody Notice notice){
         return noticeService.write(notice);
     }
-
-
 }
