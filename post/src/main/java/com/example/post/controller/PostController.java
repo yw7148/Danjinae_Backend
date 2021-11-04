@@ -31,7 +31,6 @@ public class PostController {
     //게시물 전체 리스트
     @GetMapping("/totalpostlist/{keyword}")
     public Page<Post> totalPostList(Model model, @PageableDefault(page=0,size=10,sort="id",direction= Sort.Direction.DESC) Pageable pageable,@PathVariable String keyword){
-
         Page<Post> list= null;
 
         if(keyword==null){
