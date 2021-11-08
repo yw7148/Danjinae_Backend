@@ -15,6 +15,6 @@ public class Swagger2Config {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2).select()
-                .apis(RequestHandlerSelectors.basePackage("com.danjinae.rest")).paths(PathSelectors.any()).build();
+                .apis(RequestHandlerSelectors.basePackage("com.capstone.danjinae")).paths(PathSelectors.any()).build();
     }
 }
