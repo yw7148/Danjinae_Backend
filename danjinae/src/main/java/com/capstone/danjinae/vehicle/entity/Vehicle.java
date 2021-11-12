@@ -16,14 +16,17 @@ public class Vehicle {
 
     @Column(name="user_id")
     private int userId;
+    @Column(name="phone")
     private String phone;
+    @Column(name="guest")
     private boolean guest;
 
     @Column(name="start_date")
     private Timestamp startDate;
 
     @Column(name="end_date")
-    private Timestamp toDate;
+    private Timestamp endDate;
+    @Column(name="number")
     private String number; //차량 번호
 
     //set guest

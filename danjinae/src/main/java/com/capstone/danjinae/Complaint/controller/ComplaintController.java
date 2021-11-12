@@ -18,7 +18,7 @@ public class ComplaintController {
     private ComplaintService complaintService;
 
     @PostMapping(value = "/add")
-    public Boolean postMethodName(@RequestBody NewComplaintRequest request) {
+    public Boolean postMethodName(@RequestBody NewComplaintRequest request){
         Complaint toadd;
         try {
             toadd = Complaint.builder().content(request.getContent()).userId(request.getUserId())
@@ -31,5 +31,6 @@ public class ComplaintController {
 
         return true;
     }
+
 
 }

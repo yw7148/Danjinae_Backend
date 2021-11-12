@@ -13,6 +13,7 @@ public class Notice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="notice_id")
     private Integer id;
+    @Column(name = "content")
     private String content;
 
     @Column(name="start_date")

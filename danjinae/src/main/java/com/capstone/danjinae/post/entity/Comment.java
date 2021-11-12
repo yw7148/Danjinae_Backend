@@ -16,6 +16,8 @@ public class Comment {
 
     @Column(name="user_id")
     private Integer userId;
+
+    @Column(name="comment")
     private String comment;
 
     @ManyToOne
