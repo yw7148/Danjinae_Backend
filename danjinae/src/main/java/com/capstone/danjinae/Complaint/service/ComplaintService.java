@@ -22,7 +22,7 @@ public class ComplaintService {
         return complaint;
     }
 
-    public Complaint getMgFee(Integer id) {
+    public Complaint getComplaint(Integer id) {
 
         return complaintRepository.findById(id).get();
     }
