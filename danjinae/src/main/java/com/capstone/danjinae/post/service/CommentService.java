@@ -4,10 +4,14 @@ import com.capstone.danjinae.post.entity.Comment;
 import com.capstone.danjinae.post.entity.Post;
 import com.capstone.danjinae.post.repository.CommentRepository;
 import com.capstone.danjinae.post.repository.PostRepository;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,20 +28,18 @@ public class CommentService {
     private CommentService commentService;
 
     @Transactional
-    public List<Comment> getComment(Post post){
-        return commentRepository.findCommentsByPost(post);
+    public Page<Comment> getComment(Pageable pageable){
+        return commentRepository.findAll(pageable);
     }
 
     @Transactional
-    public Comment write(Comment comment){
-        System.out.println("1");
-        Optional<Post> post= postRepository.findById(comment.getPost().getPostId());
-        System.out.println("2");
+    public Comment write(Integer postId, Comment comment){
+        Optional<Post> post= postRepository.findById(postId);
         comment.setPost(post.get());
-        System.out.println("3");
         commentRepository.save(comment);
-        System.out.println("4");
         return comment;
     }
+
+
 
 }

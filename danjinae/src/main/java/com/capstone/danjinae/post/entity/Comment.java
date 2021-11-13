@@ -1,5 +1,7 @@
 package com.capstone.danjinae.post.entity;
 
+import com.capstone.danjinae.post.service.PostService;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
@@ -23,6 +25,15 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name="post_id")
     private Post post;
+
+    @Builder
+    public Comment(Integer commentId, Integer userId, String comment, Integer postId) {
+
+        PostService postService = null;
+        this.commentId= commentId;
+        this.userId= userId;
+        this.comment= comment;
+    }
 
     public void setPost(Post post) {
         this.post = post;

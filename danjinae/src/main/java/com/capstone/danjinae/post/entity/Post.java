@@ -1,13 +1,17 @@
 package com.capstone.danjinae.post.entity;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 //table
 @Entity
 @Getter
+@NoArgsConstructor
 public class Post {
 
     @Id
@@ -24,5 +28,13 @@ public class Post {
 
     @Column(name="apt_id")
     private Integer aptId;
+
+    @Builder
+    public Post(String title, String content, Integer userId, Integer aptId) {
+        this.title = title;
+        this.content = content;
+        this.userId = userId;
+        this.aptId = aptId;
+    }
 
 }

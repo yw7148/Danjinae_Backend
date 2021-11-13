@@ -1,5 +1,6 @@
 package com.capstone.danjinae.notice.entity;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
@@ -20,8 +21,16 @@ public class Notice {
     private Timestamp startDate;
 
     @Column(name="end_date")
-    private Timestamp enddate;
+    private Timestamp endDate;
 
     @Column(name="cat_id")
     private Integer catId;
+
+    @Builder
+    public Notice(String content, Timestamp startDate, Timestamp endDate, Integer catId) {
+        this.content = content;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.catId = catId;
+    }
 }

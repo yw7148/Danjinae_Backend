@@ -1,5 +1,6 @@
 package com.capstone.danjinae.user.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -31,5 +32,14 @@ public class User {
 
     public void resident() {
         manager=false;
+    }
+
+    @Builder
+    public User(int aptId, String name, String address, Timestamp birth,String phone ) {
+        this.aptId = aptId;
+        this.name = name;
+        this.address = address;
+        this.birth = birth;
+        this.phone=phone;
     }
 }
