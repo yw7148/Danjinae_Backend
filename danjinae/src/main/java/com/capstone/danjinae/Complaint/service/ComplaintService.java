@@ -22,9 +22,14 @@ public class ComplaintService {
         return complaint;
     }
 
-    public Complaint getMgFee(Integer id) {
+    public Complaint getComplaint(Integer id) {
 
         return complaintRepository.findById(id).get();
+    }
+
+    public Page<Complaint> getManagerComplaint(Integer aptid, Pageable pageable) {
+
+        return complaintRepository.findByAptId(aptid, pageable);
     }
 
     public void deleteComplaint(Integer id) {

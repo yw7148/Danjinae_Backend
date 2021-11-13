@@ -25,6 +25,11 @@ public class MgFeeService {
         return mgFeeRepository.findByUserIdAndAptId(userId, aptId, pageable);
     }
 
+    public Page<MgFee> getManagerMgFeeList(Integer aptId, Pageable pageable) {
+
+        return mgFeeRepository.findByAptId(aptId, pageable);
+    }
+
     public MgFee getMgFee(Integer id) {
 
         return mgFeeRepository.findById(id).get();

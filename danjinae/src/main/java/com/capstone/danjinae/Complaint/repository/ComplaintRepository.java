@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ComplaintRepository extends JpaRepository<Complaint, Integer> {
+    Page<Complaint> findByAptId(Integer aptId, Pageable pageable);
 }
