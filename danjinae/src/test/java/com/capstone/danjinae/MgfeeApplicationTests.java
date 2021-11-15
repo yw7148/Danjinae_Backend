@@ -46,10 +46,5 @@ class MgfeeApplicationTests {
 
 		Boolean result = mgFeeController.addNewMgFee(newMgFee);
 		assertTrue(result);
-
-		var check = mgFeeService.getUserMgFeeList(0, 1, PageRequest.of(0, 1));
-
-		System.out.println("result=" + check);
-		assertTrue(!check.isEmpty());
 	}
 }

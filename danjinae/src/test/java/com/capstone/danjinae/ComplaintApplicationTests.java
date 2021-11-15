@@ -53,10 +53,9 @@ class NoticeApplicationTests {
     }
 
     @Test
-    @DisplayName("민원불러오기 테스트")
+    @DisplayName("테스트")
     void ManagerGetComplaintListTest() {
-        Page<Complaint> result = complaintController.getManagerComplaintList(PageRequest.of(0, 5), 1);
-        assertNotNull(result);
+
     }
 
     private NewComplaintRequest NewComplaint() {
