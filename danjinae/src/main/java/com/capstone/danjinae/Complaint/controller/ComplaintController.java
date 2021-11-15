@@ -1,7 +1,13 @@
 package com.capstone.danjinae.Complaint.controller;
 
+import java.util.function.Function;
+
+import com.capstone.danjinae.Complaint.DTO.ComplaintListResponse;
+import com.capstone.danjinae.Complaint.DTO.ComplaintResponse;
 import com.capstone.danjinae.Complaint.DTO.NewComplaintRequest;
+import com.capstone.danjinae.Complaint.DTO.NewCplProcessRequest;
 import com.capstone.danjinae.Complaint.entity.Complaint;
+import com.capstone.danjinae.Complaint.entity.ComplaintProcess;
 import com.capstone.danjinae.Complaint.service.ComplaintService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,18 +44,64 @@ public class ComplaintController {
         return true;
     }
 
+    @PostMapping(value = "/addprocess")
+    public Boolean addNewCplProcess(@RequestBody NewCplProcessRequest request) {
+        ComplaintProcess toadd;
+        try {
+            toadd = ComplaintProcess.builder().content(request.getContent()).cplId(request.getCplId())
+                    .mgrId(request.getMgrId()).build();
+
+            complaintService.writeCplProcess(toadd);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
+    }
+
     @GetMapping(value = "/get/{aptid}")
-    public Page<Complaint> getManagerComplaintList(
+    public Page<ComplaintListResponse> getManagerComplaintList(
             @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
             @PathVariable Integer aptid) {
 
-        Page<Complaint> list;
+        Page<ComplaintListResponse> list;
         try {
-            list = complaintService.getManagerComplaint(aptid, pageable);
+            Page<Complaint> ettlist = complaintService.getManagerComplaint(aptid, pageable);
+            list = ettlist.map(new Function<Complaint, ComplaintListResponse>() {
+                @Override
+                public ComplaintListResponse apply(Complaint ett) {
+                    ComplaintListResponse dto = new ComplaintListResponse();
+                    dto.setContent(ett.getContent());
+                    dto.setCplId(ett.getId());
+                    return dto;
+                }
+            });
         } catch (Exception e) {
             return null;
         }
 
         return list;
+    }
+
+    @GetMapping(value = "/select/{cplid}")
+    public ComplaintResponse getManagerComplaint(
+            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+            @PathVariable Integer cplid) {
+
+        ComplaintResponse result = new ComplaintResponse();
+        try {
+            Page<ComplaintProcess> ettlist = complaintService.getComplaintProcess(cplid, pageable);
+            result.setProcesses(ettlist.map(new Function<ComplaintProcess, String>() {
+                @Override
+                public String apply(ComplaintProcess entity) {
+                    String dto = entity.getContent();
+                    return dto;
+                }
+            }));
+        } catch (Exception e) {
+            return null;
+        }
+
+        return result;
     }
 }
