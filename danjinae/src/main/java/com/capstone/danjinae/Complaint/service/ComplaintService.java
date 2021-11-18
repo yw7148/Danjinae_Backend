@@ -32,7 +32,6 @@ public class ComplaintService {
         cplProcessRepository.save(complaintProcess);
         return complaintProcess;
     }
-
     public Complaint getComplaint(Integer id) {
 
         return complaintRepository.findById(id).get();

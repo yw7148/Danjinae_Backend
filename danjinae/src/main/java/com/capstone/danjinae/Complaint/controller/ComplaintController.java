@@ -6,10 +6,13 @@ import com.capstone.danjinae.Complaint.DTO.ComplaintListResponse;
 import com.capstone.danjinae.Complaint.DTO.ComplaintResponse;
 import com.capstone.danjinae.Complaint.DTO.NewComplaintRequest;
 import com.capstone.danjinae.Complaint.DTO.NewCplProcessRequest;
+import com.capstone.danjinae.Complaint.DTO.NewComplaintResponse;
 import com.capstone.danjinae.Complaint.entity.Complaint;
 import com.capstone.danjinae.Complaint.entity.ComplaintProcess;
 import com.capstone.danjinae.Complaint.service.ComplaintService;
 
+import com.capstone.danjinae.post.DTO.postDTO.PostResponse;
+import com.capstone.danjinae.post.entity.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.domain.Page;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/complaint")
@@ -103,5 +107,17 @@ public class ComplaintController {
         }
 
         return result;
+    }
+
+    @GetMapping("/select")
+    public NewComplaintResponse selectPost(@RequestParam("id") Integer id){
+        Complaint complaint = complaintService.getComplaint(id);
+        NewComplaintResponse dto = new NewComplaintResponse();
+
+        dto.setId(complaint.getId());
+        dto.setContent(complaint.getContent());
+        dto.setUserId(complaint.getUserId());
+        dto.setAptId(complaint.getAptId());
+        return dto;
     }
 }
