@@ -61,8 +61,39 @@ public class MgFeeController {
         return dtolist;
     }
 
+    @GetMapping("/getmanagermgfee")
+    public Page<UserMgFeeResponse> managerMgFeeList(
+            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(value = "aptId") Integer aptId) {
+
+        Page<UserMgFeeResponse> dtolist;
+        try {
+            Page<MgFee> entitylist = mgFeeService.getManagerMgFeeList(aptId, pageable);
+
+            dtolist = entitylist.map(new Function<MgFee, UserMgFeeResponse>() {
+                @Override
+                public UserMgFeeResponse apply(MgFee entity) {
+                    UserMgFeeResponse dto = new UserMgFeeResponse();
+                    dto.setId(entity.getId());
+                    dto.setDate(entity.getDate());
+                    dto.setFee(entity.getFee());
+                    dto.setPaid(entity.getPaid());
+                    dto.setUserId(entity.getUserId());
+                    dto.setAptId(entity.getAptId());
+                    dto.setCatId(entity.getCatId());
+                    return dto;
+                }
+            });
+
+        } catch (Exception e) {
+            return null;
+        }
+
+        return dtolist;
+    }
+
     @PostMapping(value = "/setManagerMgFee")
-    public Boolean postMethodName(@RequestBody NewMgFeeRequest request) {
+    public Boolean addNewMgFee(@RequestBody NewMgFeeRequest request) {
         MgFee toadd;
         try {
             toadd = MgFee.builder().fee(request.getFee()).userId(request.getUserId()).aptId(request.getAptId())

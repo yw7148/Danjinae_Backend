@@ -12,4 +12,7 @@ public interface MgFeeRepository extends JpaRepository<MgFee, Integer> {
 
     // findBy(컬럼이름)Containing
     Page<MgFee> findByUserIdAndAptId(Integer userId, Integer aptId, Pageable pageable);
+
+    Page<MgFee> findByAptId(Integer aptId, Pageable pageable);
+
 }

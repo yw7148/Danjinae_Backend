@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 public class VehicleResponse {
-
+    private Integer vehicleId;
     private Integer userId;
     private String phone;
     private boolean guest;
