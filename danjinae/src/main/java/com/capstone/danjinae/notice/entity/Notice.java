@@ -14,6 +14,10 @@ public class Notice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="notice_id")
     private Integer id;
+
+    @Column(name="aptId")
+    private Integer aptId;
+
     @Column(name = "content")
     private String content;
 
@@ -27,7 +31,8 @@ public class Notice {
     private Integer catId;
 
     @Builder
-    public Notice(String content, Timestamp startDate, Timestamp endDate, Integer catId) {
+    public Notice(String content, Integer aptId,Timestamp startDate, Timestamp endDate, Integer catId) {
+        this.aptId = aptId;
         this.content = content;
         this.startDate = startDate;
         this.endDate = endDate;
