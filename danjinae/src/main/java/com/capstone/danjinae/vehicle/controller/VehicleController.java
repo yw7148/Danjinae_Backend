@@ -68,6 +68,7 @@ public class VehicleController {
             @Override
             public VehicleResponse apply(Vehicle entity) {
                 VehicleResponse dto = new VehicleResponse();
+                dto.setVehicleId(entity.getId());
                 dto.setUserId(entity.getUserId());
                 dto.setPhone(entity.getPhone());
                 dto.setGuest(entity.getGuest());
