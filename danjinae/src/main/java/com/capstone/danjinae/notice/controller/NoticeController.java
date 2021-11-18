@@ -1,5 +1,6 @@
 package com.capstone.danjinae.notice.controller;
 
+import java.sql.Timestamp;
 import java.util.function.Function;
 
 import com.capstone.danjinae.notice.DTO.NoticeListResponse;
@@ -26,7 +27,7 @@ public class NoticeController {
     public Boolean postNotice(@RequestBody NoticeRequest notice){
         Notice toadd;
         try {
-            toadd = Notice.builder().content(notice.getContent()).startDate(notice.getStartDate()).endDate(notice.getEndDate())
+            toadd = Notice.builder().content(notice.getContent()).startDate(new Timestamp(notice.getStartDate().getTime())).endDate(new Timestamp(notice.getEndDate().getTime()))
                     .catId(notice.getCatId()).build();
 
             noticeService.write(toadd);

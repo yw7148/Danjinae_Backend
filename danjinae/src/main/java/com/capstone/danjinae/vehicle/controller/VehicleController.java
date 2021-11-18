@@ -30,7 +30,7 @@ public class VehicleController {
 
         Vehicle toadd;
         try {
-            toadd = Vehicle.builder().userId(vehicle.getUserId()).phone(vehicle.getPhone()).startDate(vehicle.getStartDate()).endDate(vehicle.getEndDate())
+            toadd = Vehicle.builder().userId(vehicle.getUserId()).phone(vehicle.getPhone()).startDate(new Timestamp(vehicle.getStartDate().getTime())).endDate(new Timestamp(vehicle.getEndDate().getTime()))
                     .number(vehicle.getNumber()).build();
 
             vehicleService.writeResidnet(toadd);
@@ -46,7 +46,7 @@ public class VehicleController {
 
         Vehicle toadd;
         try {
-            toadd = Vehicle.builder().userId(vehicle.getUserId()).phone(vehicle.getPhone()).startDate(vehicle.getStartDate()).endDate(vehicle.getEndDate())
+            toadd = Vehicle.builder().userId(vehicle.getUserId()).phone(vehicle.getPhone()).startDate(new Timestamp(vehicle.getStartDate().getTime())).endDate(new Timestamp(vehicle.getEndDate().getTime()))
                     .number(vehicle.getNumber()).build();
 
             vehicleService.writeGuest(toadd);

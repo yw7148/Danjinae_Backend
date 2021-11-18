@@ -26,7 +26,7 @@ public class UserController {
 
         try {
             toadd = User.builder().aptId(user.getAptId()).name(user.getName()).address(user.getAddress())
-                    .birth(user.getBirth()).phone(user.getPhone()).build();
+                    .birth(new Timestamp(user.getBirth().getTime())).phone(user.getPhone()).build();
 
             userService.writeUser(toadd);
         } catch (Exception e) {
