@@ -9,6 +9,8 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.ColumnDefault;
+
 //table
 @Entity
 @Getter
@@ -25,6 +27,7 @@ public class MgFee {
     private Timestamp date;
     @Column(name = "fee")
     private Integer fee;
+
     @Column(name = "paid")
     private Boolean paid;
 

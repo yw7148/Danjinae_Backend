@@ -103,7 +103,7 @@ public class MgFeeController {
         try {
             var target = userService.getUserWithAddress(request.getAddress(), request.getAptId());
             toadd = MgFee.builder().fee(request.getFee()).userId(target.getId()).aptId(request.getAptId())
-                    .catId(request.getCatId()).content(request.getContent()).build();
+                    .catId(request.getCatId()).date(request.getDate()).content(request.getContent()).build();
 
             mgFeeService.write(toadd);
         } catch (Exception e) {
