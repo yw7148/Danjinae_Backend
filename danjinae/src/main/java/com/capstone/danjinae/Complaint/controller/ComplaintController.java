@@ -53,7 +53,7 @@ public class ComplaintController {
         ComplaintProcess toadd;
         try {
             toadd = ComplaintProcess.builder().content(request.getContent()).cplId(request.getCplId())
-                    .mgrId(request.getMgrId()).build();
+                    .mgrId(request.getMgrId()).state(request.getState()).build();
 
             complaintService.writeCplProcess(toadd);
         } catch (Exception e) {
