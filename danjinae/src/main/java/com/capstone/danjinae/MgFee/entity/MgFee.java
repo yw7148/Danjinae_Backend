@@ -51,6 +51,11 @@ public class MgFee {
         this.date = new Timestamp(date.getTime());
     }
 
+    @PrePersist
+    public void prePersist() {
+        this.paid = (this.paid == null ? false : this.paid);
+    }
+
     public void paid() {
         this.paid = true;
     }
