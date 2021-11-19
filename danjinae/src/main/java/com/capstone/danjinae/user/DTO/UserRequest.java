@@ -16,7 +16,7 @@ public class UserRequest {
     private int aptId;
     private String name;
     private String address;
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birth;
     private String phone;
 

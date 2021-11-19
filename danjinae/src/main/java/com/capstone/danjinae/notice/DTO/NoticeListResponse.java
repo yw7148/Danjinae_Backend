@@ -12,9 +12,9 @@ import lombok.Setter;
 public class NoticeListResponse {
     private Integer id;
     private String content;
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date endDate;
     private Integer catId;
 

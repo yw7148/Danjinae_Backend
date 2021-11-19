@@ -102,6 +102,8 @@ public class ComplaintController {
                     return dto;
                 }
             }));
+            result.setCplId(cplid);
+            result.setContent(complaintService.getComplaint(cplid).getContent());
         } catch (Exception e) {
             return null;
         }

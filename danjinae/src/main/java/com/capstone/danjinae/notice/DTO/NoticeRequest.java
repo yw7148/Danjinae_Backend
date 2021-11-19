@@ -12,9 +12,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class NoticeRequest {
 
     private String content;
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date endDate;
     private Integer catId;
 }

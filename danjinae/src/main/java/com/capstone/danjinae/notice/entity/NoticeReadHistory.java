@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Getter
+@Table(name = "noticeReadHistory")
 public class NoticeReadHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

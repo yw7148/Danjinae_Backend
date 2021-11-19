@@ -17,9 +17,9 @@ public class VehicleResponse {
     private Integer userId;
     private String phone;
     private boolean guest;
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date endDate;
     private String number; //차량 번호
 }
