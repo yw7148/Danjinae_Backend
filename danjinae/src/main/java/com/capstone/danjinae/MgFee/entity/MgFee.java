@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.*;
 
@@ -27,6 +28,9 @@ public class MgFee {
     @Column(name = "paid")
     private Boolean paid;
 
+    @Column(name = "content")
+    private String content;
+
     @Column(name = "userid")
     private Integer userId;
     @Column(name = "aptid")
@@ -35,11 +39,13 @@ public class MgFee {
     private Integer catId;
 
     @Builder
-    public MgFee(Integer fee, Integer userId, Integer aptId, Integer catId) {
+    public MgFee(Integer fee, Integer userId, Integer aptId, Integer catId, String content, Date date) {
+        this.content = content;
         this.fee = fee;
         this.userId = userId;
         this.aptId = aptId;
         this.catId = catId;
+        this.date = new Timestamp(date.getTime());
     }
 
     public void paid() {

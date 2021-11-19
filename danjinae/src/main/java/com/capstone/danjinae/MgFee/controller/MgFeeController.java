@@ -6,6 +6,7 @@ import com.capstone.danjinae.MgFee.DTO.NewMgFeeRequest;
 import com.capstone.danjinae.MgFee.DTO.UserMgFeeResponse;
 import com.capstone.danjinae.MgFee.entity.MgFee;
 import com.capstone.danjinae.MgFee.service.MgFeeService;
+import com.capstone.danjinae.user.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,9 @@ public class MgFeeController {
 
     @Autowired
     private MgFeeService mgFeeService;
+
+    @Autowired
+    private UserService userService;
 
     @PutMapping("/userispaid/{mgfeeid}")
     public Boolean UserPayMoney(@PathVariable Integer mgfeeid) {
@@ -96,8 +100,9 @@ public class MgFeeController {
     public Boolean addNewMgFee(@RequestBody NewMgFeeRequest request) {
         MgFee toadd;
         try {
-            toadd = MgFee.builder().fee(request.getFee()).userId(request.getUserId()).aptId(request.getAptId())
-                    .catId(request.getCatId()).build();
+            var target = userService.getUserWithAddress(request.getAddress(), request.getAptId());
+            toadd = MgFee.builder().fee(request.getFee()).userId(target.getId()).aptId(request.getAptId())
+                    .catId(request.getCatId()).content(request.getContent()).build();
 
             mgFeeService.write(toadd);
         } catch (Exception e) {

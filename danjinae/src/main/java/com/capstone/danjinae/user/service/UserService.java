@@ -13,8 +13,16 @@ public class UserService {
     private UserRepository userRepository;
 
     @Transactional
-    public User writeUser(User user){
+    public User writeUser(User user) {
         user.resident();
         return userRepository.save(user);
+    }
+
+    public User getUserWithAddress(String address, Integer aptId) {
+        return userRepository.findByAddressAndAptId(address, aptId);
+    }
+
+    public User getUser(Integer id) {
+        return userRepository.getById(id);
     }
 }

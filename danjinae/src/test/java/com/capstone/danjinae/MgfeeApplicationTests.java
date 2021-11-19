@@ -42,7 +42,7 @@ class MgfeeApplicationTests {
 		newMgFee.setAptId(1);
 		newMgFee.setCatId(0);
 		newMgFee.setFee(1000);
-		newMgFee.setUserId(0);
+		newMgFee.setAddress("101동101호");
 
 		Boolean result = mgFeeController.addNewMgFee(newMgFee);
 	}
