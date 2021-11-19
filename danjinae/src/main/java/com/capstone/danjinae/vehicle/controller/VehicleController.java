@@ -2,6 +2,8 @@ package com.capstone.danjinae.vehicle.controller;
 
 import com.capstone.danjinae.post.DTO.postDTO.PostResponse;
 import com.capstone.danjinae.post.entity.Post;
+import com.capstone.danjinae.user.service.UserService;
+import com.capstone.danjinae.vehicle.DTO.VehicleInfoResponse;
 import com.capstone.danjinae.vehicle.DTO.VehicleRequest;
 import com.capstone.danjinae.vehicle.DTO.VehicleResponse;
 import com.capstone.danjinae.vehicle.entity.Vehicle;
@@ -23,6 +25,9 @@ public class VehicleController {
 
     @Autowired
     private VehicleService vehicleService;
+
+    @Autowired
+    private UserService userService;
 
     // 차량 등록
     @PostMapping("/resident")
@@ -87,12 +92,13 @@ public class VehicleController {
 
     // 선택된 차량 세부정보
     @GetMapping("/select/info")
-    public VehicleResponse selectInfo(@RequestParam("id") Integer id) {
+    public VehicleInfoResponse selectInfo(@RequestParam("id") Integer id) {
 
         Vehicle vehicle = vehicleService.get(id);
-        VehicleResponse dto = new VehicleResponse();
+        VehicleInfoResponse dto = new VehicleInfoResponse();
 
-        dto.setUserId(vehicle.getUserId());
+        dto.setVehicleId(vehicle.getId());
+        dto.setAddress(userService.getUser(vehicle.getUserId()).getAddress());
         dto.setPhone(vehicle.getPhone());
         dto.setGuest(vehicle.getGuest());
         dto.setStartDate(vehicle.getStartDate());

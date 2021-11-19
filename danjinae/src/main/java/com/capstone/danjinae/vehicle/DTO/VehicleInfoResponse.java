@@ -12,9 +12,9 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class VehicleResponse {
+public class VehicleInfoResponse {
     private Integer vehicleId;
-    private Integer userId;
+    private String address;
     private String phone;
     private boolean guest;
     @JsonFormat(pattern = "yyyy-MM-dd")
