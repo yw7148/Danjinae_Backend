@@ -94,6 +94,7 @@ public class ComplaintController {
 
         ComplaintResponse result = new ComplaintResponse();
         try {
+            Complaint target = complaintService.getComplaint(cplid);
             Page<ComplaintProcess> ettlist = complaintService.getComplaintProcess(cplid, pageable);
             result.setProcesses(ettlist.map(new Function<ComplaintProcess, String>() {
                 @Override
@@ -103,23 +104,13 @@ public class ComplaintController {
                 }
             }));
             result.setCplId(cplid);
-            result.setContent(complaintService.getComplaint(cplid).getContent());
+            result.setContent(target.getContent());
+            result.setUserId(target.getUserId());
         } catch (Exception e) {
-            return null;
+            return result;
         }
 
         return result;
     }
 
-    @GetMapping("/select")
-    public NewComplaintResponse selectPost(@RequestParam("id") Integer id){
-        Complaint complaint = complaintService.getComplaint(id);
-        NewComplaintResponse dto = new NewComplaintResponse();
-
-        dto.setId(complaint.getId());
-        dto.setContent(complaint.getContent());
-        dto.setUserId(complaint.getUserId());
-        dto.setAptId(complaint.getAptId());
-        return dto;
-    }
 }

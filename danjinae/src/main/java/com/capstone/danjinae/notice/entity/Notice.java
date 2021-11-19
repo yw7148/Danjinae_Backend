@@ -3,12 +3,14 @@ package com.capstone.danjinae.notice.entity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Notice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

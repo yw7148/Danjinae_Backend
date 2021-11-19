@@ -2,6 +2,7 @@ package com.capstone.danjinae.Complaint.entity;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Table(name = "complaintProcess")
+@NoArgsConstructor
 public class ComplaintProcess {
 
     @Id

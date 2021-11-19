@@ -2,12 +2,14 @@ package com.capstone.danjinae.user.entity;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class User {
 
     @Id

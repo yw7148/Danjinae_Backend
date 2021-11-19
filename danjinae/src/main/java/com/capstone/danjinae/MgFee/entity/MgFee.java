@@ -2,6 +2,7 @@ package com.capstone.danjinae.MgFee.entity;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Table(name = "mgfee")
+@NoArgsConstructor
 public class MgFee {
 
     @Id

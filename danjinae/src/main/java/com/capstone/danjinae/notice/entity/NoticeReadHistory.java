@@ -3,6 +3,7 @@ package com.capstone.danjinae.notice.entity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -10,6 +11,7 @@ import java.sql.Timestamp;
 @Entity
 @Getter
 @Table(name = "noticeReadHistory")
+@NoArgsConstructor
 public class NoticeReadHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
