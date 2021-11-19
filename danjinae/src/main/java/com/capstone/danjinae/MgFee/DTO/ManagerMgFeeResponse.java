@@ -1,17 +1,15 @@
 package com.capstone.danjinae.MgFee.DTO;
 
-import lombok.Setter;
-
-import java.sql.Timestamp;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
-public class UserMgFeeResponse {
+public class ManagerMgFeeResponse {
     private Integer id;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -19,8 +17,7 @@ public class UserMgFeeResponse {
     private Integer fee;
     private Boolean paid;
 
-    private Integer userId;
+    private String address;
     private Integer aptId;
     private Integer catId;
-
 }

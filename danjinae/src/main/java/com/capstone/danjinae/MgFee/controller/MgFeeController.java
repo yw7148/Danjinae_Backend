@@ -2,6 +2,7 @@ package com.capstone.danjinae.MgFee.controller;
 
 import java.util.function.Function;
 
+import com.capstone.danjinae.MgFee.DTO.ManagerMgFeeResponse;
 import com.capstone.danjinae.MgFee.DTO.NewMgFeeRequest;
 import com.capstone.danjinae.MgFee.DTO.UserMgFeeResponse;
 import com.capstone.danjinae.MgFee.entity.MgFee;
@@ -66,23 +67,23 @@ public class MgFeeController {
     }
 
     @GetMapping("/getmanagermgfee")
-    public Page<UserMgFeeResponse> managerMgFeeList(
+    public Page<ManagerMgFeeResponse> managerMgFeeList(
             @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(value = "aptId") Integer aptId) {
 
-        Page<UserMgFeeResponse> dtolist;
+        Page<ManagerMgFeeResponse> dtolist;
         try {
             Page<MgFee> entitylist = mgFeeService.getManagerMgFeeList(aptId, pageable);
 
-            dtolist = entitylist.map(new Function<MgFee, UserMgFeeResponse>() {
+            dtolist = entitylist.map(new Function<MgFee, ManagerMgFeeResponse>() {
                 @Override
-                public UserMgFeeResponse apply(MgFee entity) {
-                    UserMgFeeResponse dto = new UserMgFeeResponse();
+                public ManagerMgFeeResponse apply(MgFee entity) {
+                    ManagerMgFeeResponse dto = new ManagerMgFeeResponse();
                     dto.setId(entity.getId());
                     dto.setDate(entity.getDate());
                     dto.setFee(entity.getFee());
                     dto.setPaid(entity.getPaid());
-                    dto.setUserId(entity.getUserId());
+                    dto.setAddress(userService.getUser(entity.getUserId()).getAddress());
                     dto.setAptId(entity.getAptId());
                     dto.setCatId(entity.getCatId());
                     return dto;
