@@ -11,5 +11,5 @@ public class ComplaintResponse {
     private Integer cplId;
     private String content;
     private Integer userId;
-    private Page<String> processes;
+    private Page<CplProcessResponse> processes;
 }

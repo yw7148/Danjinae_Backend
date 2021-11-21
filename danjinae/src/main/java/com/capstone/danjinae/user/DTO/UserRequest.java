@@ -1,4 +1,5 @@
 package com.capstone.danjinae.user.DTO;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,11 +14,12 @@ import java.util.Date;
 @Setter
 public class UserRequest {
 
-    private int aptId;
+    private Integer mgrId;
     private String name;
     private String address;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birth;
     private String phone;
-
+    private String carphone;
+    private String carnumber;
 }

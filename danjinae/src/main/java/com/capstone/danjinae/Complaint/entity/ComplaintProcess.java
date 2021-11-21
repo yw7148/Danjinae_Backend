@@ -29,10 +29,14 @@ public class ComplaintProcess {
     @Column(name = "mgrid")
     private Integer mgrId;
 
+    @Column(name = "state")
+    private String state;
+
     @Builder
-    public ComplaintProcess(String content, Integer cplId, Integer mgrId) {
+    public ComplaintProcess(String content, Integer cplId, Integer mgrId, String state) {
         this.content = content;
         this.cplId = cplId;
         this.mgrId = mgrId;
+        this.state = state;
     }
 }

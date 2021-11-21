@@ -4,6 +4,7 @@ import java.util.function.Function;
 
 import com.capstone.danjinae.Complaint.DTO.ComplaintListResponse;
 import com.capstone.danjinae.Complaint.DTO.ComplaintResponse;
+import com.capstone.danjinae.Complaint.DTO.CplProcessResponse;
 import com.capstone.danjinae.Complaint.DTO.NewComplaintRequest;
 import com.capstone.danjinae.Complaint.DTO.NewCplProcessRequest;
 import com.capstone.danjinae.Complaint.DTO.NewComplaintResponse;
@@ -53,7 +54,7 @@ public class ComplaintController {
         ComplaintProcess toadd;
         try {
             toadd = ComplaintProcess.builder().content(request.getContent()).cplId(request.getCplId())
-                    .mgrId(request.getMgrId()).build();
+                    .mgrId(request.getMgrId()).state(request.getState()).build();
 
             complaintService.writeCplProcess(toadd);
         } catch (Exception e) {
@@ -96,10 +97,13 @@ public class ComplaintController {
         try {
             Complaint target = complaintService.getComplaint(cplid);
             Page<ComplaintProcess> ettlist = complaintService.getComplaintProcess(cplid, pageable);
-            result.setProcesses(ettlist.map(new Function<ComplaintProcess, String>() {
+            result.setProcesses(ettlist.map(new Function<ComplaintProcess, CplProcessResponse>() {
                 @Override
-                public String apply(ComplaintProcess entity) {
-                    String dto = entity.getContent();
+                public CplProcessResponse apply(ComplaintProcess entity) {
+                    CplProcessResponse dto = new CplProcessResponse();
+                    dto.setContent(entity.getContent());
+                    dto.setMgrId(entity.getMgrId());
+                    dto.setState(entity.getState());
                     return dto;
                 }
             }));

@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Getter
 @Setter
 public class NoticeRequest {
-
+    private Integer aptId;
     private String content;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
@@ -18,6 +18,3 @@ public class NoticeRequest {
     private Date endDate;
     private Integer catId;
 }
-
-
-

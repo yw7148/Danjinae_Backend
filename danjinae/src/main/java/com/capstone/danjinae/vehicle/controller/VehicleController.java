@@ -2,6 +2,8 @@ package com.capstone.danjinae.vehicle.controller;
 
 import com.capstone.danjinae.post.DTO.postDTO.PostResponse;
 import com.capstone.danjinae.post.entity.Post;
+import com.capstone.danjinae.user.service.UserService;
+import com.capstone.danjinae.vehicle.DTO.VehicleInfoResponse;
 import com.capstone.danjinae.vehicle.DTO.VehicleRequest;
 import com.capstone.danjinae.vehicle.DTO.VehicleResponse;
 import com.capstone.danjinae.vehicle.entity.Vehicle;
@@ -24,14 +26,18 @@ public class VehicleController {
     @Autowired
     private VehicleService vehicleService;
 
-    //차량 등록
+    @Autowired
+    private UserService userService;
+
+    // 차량 등록
     @PostMapping("/resident")
-    public Boolean inputResident(@RequestBody VehicleRequest vehicle){
+    public Boolean inputResident(@RequestBody VehicleRequest vehicle) {
 
         Vehicle toadd;
         try {
-            toadd = Vehicle.builder().userId(vehicle.getUserId()).phone(vehicle.getPhone()).startDate(new Timestamp(vehicle.getStartDate().getTime())).endDate(new Timestamp(vehicle.getEndDate().getTime()))
-                    .number(vehicle.getNumber()).build();
+            toadd = Vehicle.builder().userId(vehicle.getUserId()).phone(vehicle.getPhone())
+                    .startDate(new Timestamp(vehicle.getStartDate().getTime()))
+                    .endDate(new Timestamp(vehicle.getEndDate().getTime())).number(vehicle.getNumber()).build();
 
             vehicleService.writeResidnet(toadd);
         } catch (Exception e) {
@@ -40,14 +46,15 @@ public class VehicleController {
         return true;
     }
 
-    //게스트 차량 등록
+    // 게스트 차량 등록
     @PostMapping("/guest")
-    public Boolean inputGuest(@RequestBody VehicleRequest vehicle){
+    public Boolean inputGuest(@RequestBody VehicleRequest vehicle) {
 
         Vehicle toadd;
         try {
-            toadd = Vehicle.builder().userId(vehicle.getUserId()).phone(vehicle.getPhone()).startDate(new Timestamp(vehicle.getStartDate().getTime())).endDate(new Timestamp(vehicle.getEndDate().getTime()))
-                    .number(vehicle.getNumber()).build();
+            toadd = Vehicle.builder().userId(vehicle.getUserId()).phone(vehicle.getPhone())
+                    .startDate(new Timestamp(vehicle.getStartDate().getTime()))
+                    .endDate(new Timestamp(vehicle.getEndDate().getTime())).number(vehicle.getNumber()).build();
 
             vehicleService.writeGuest(toadd);
         } catch (Exception e) {
@@ -56,15 +63,17 @@ public class VehicleController {
         return true;
     }
 
-    //선택된 차량 리스트
+    // 선택된 차량 리스트
     @GetMapping("/select/list")
-    public Page<VehicleResponse> selectList(@PageableDefault(page=0,size=10,sort="id",direction= Sort.Direction.DESC) Pageable pageable,@RequestParam("number") String number){
+    public Page<VehicleResponse> selectList(
+            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam("number") String number) {
         Page<VehicleResponse> dtoList;
-        Page<Vehicle> list= null;
+        Page<Vehicle> list = null;
 
-        list= vehicleService.search(number,pageable);
+        list = vehicleService.search(number, pageable);
 
-        dtoList = list.map(new Function< Vehicle, VehicleResponse>(){
+        dtoList = list.map(new Function<Vehicle, VehicleResponse>() {
             @Override
             public VehicleResponse apply(Vehicle entity) {
                 VehicleResponse dto = new VehicleResponse();
@@ -81,14 +90,15 @@ public class VehicleController {
         return dtoList;
     }
 
-    //선택된 차량 세부정보
+    // 선택된 차량 세부정보
     @GetMapping("/select/info")
-    public VehicleResponse selectInfo(@RequestParam("id") Integer id){
+    public VehicleInfoResponse selectInfo(@RequestParam("id") Integer id) {
 
-        Vehicle vehicle= vehicleService.get(id);
-        VehicleResponse dto= new VehicleResponse();
+        Vehicle vehicle = vehicleService.get(id);
+        VehicleInfoResponse dto = new VehicleInfoResponse();
 
-        dto.setUserId(vehicle.getUserId());
+        dto.setVehicleId(vehicle.getId());
+        dto.setAddress(userService.getUser(vehicle.getUserId()).getAddress());
         dto.setPhone(vehicle.getPhone());
         dto.setGuest(vehicle.getGuest());
         dto.setStartDate(vehicle.getStartDate());

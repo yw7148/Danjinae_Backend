@@ -5,8 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.ColumnDefault;
 
 //table
 @Entity
@@ -24,8 +27,12 @@ public class MgFee {
     private Timestamp date;
     @Column(name = "fee")
     private Integer fee;
+
     @Column(name = "paid")
     private Boolean paid;
+
+    @Column(name = "content")
+    private String content;
 
     @Column(name = "userid")
     private Integer userId;
@@ -35,11 +42,18 @@ public class MgFee {
     private Integer catId;
 
     @Builder
-    public MgFee(Integer fee, Integer userId, Integer aptId, Integer catId) {
+    public MgFee(Integer fee, Integer userId, Integer aptId, Integer catId, String content, Date date) {
+        this.content = content;
         this.fee = fee;
         this.userId = userId;
         this.aptId = aptId;
         this.catId = catId;
+        this.date = new Timestamp(date.getTime());
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.paid = (this.paid == null ? false : this.paid);
     }
 
     public void paid() {

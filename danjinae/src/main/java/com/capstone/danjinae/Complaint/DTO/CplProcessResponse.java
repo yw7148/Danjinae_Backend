@@ -5,9 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class NewCplProcessRequest {
-    private Integer cplId;
+public class CplProcessResponse {
     private Integer mgrId;
-    private String content;
     private String state;
+    private String content;
 }

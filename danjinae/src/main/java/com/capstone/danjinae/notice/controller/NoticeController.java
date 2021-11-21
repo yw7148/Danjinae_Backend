@@ -23,14 +23,15 @@ public class NoticeController {
     @Autowired
     private NoticeService noticeService;
 
-    //공지사항 작성
+    // 공지사항 작성
     @PostMapping("/add")
-    public Boolean postNotice(@RequestBody NoticeRequest notice){
+    public Boolean postNotice(@RequestBody NoticeRequest notice) {
         Notice toadd;
         try {
             this.setDefaultNoriceRequest(notice);
-            toadd = Notice.builder().content(notice.getContent()).startDate(new Timestamp(notice.getStartDate().getTime())).endDate(new Timestamp(notice.getEndDate().getTime()))
-                    .catId(notice.getCatId()).build();
+            toadd = Notice.builder().aptId(notice.getAptId()).content(notice.getContent())
+                    .startDate(new Timestamp(notice.getStartDate().getTime()))
+                    .endDate(new Timestamp(notice.getEndDate().getTime())).catId(notice.getCatId()).build();
 
             noticeService.write(toadd);
         } catch (Exception e) {
@@ -40,25 +41,23 @@ public class NoticeController {
         return true;
     }
 
-    private void setDefaultNoriceRequest(NoticeRequest input)
-    {
-        if(input.getStartDate() == null)
-        {
+    private void setDefaultNoriceRequest(NoticeRequest input) {
+        if (input.getStartDate() == null) {
             input.setStartDate(new Date());
         }
-        if(input.getEndDate() == null)
-        {
+        if (input.getEndDate() == null) {
             input.setEndDate(new Date(new Date().getTime() + 1000l * 60 * 60 * 24 * 7));
         }
-    } 
+    }
+
     @GetMapping("/get")
-    public Page<NoticeListResponse> GetNoticeList(@PageableDefault(page=0,size=10,sort="postId",direction= Sort.Direction.DESC) Pageable pageable, @RequestParam(value = "userId") Integer userId)
-    {
+    public Page<NoticeListResponse> GetNoticeList(
+            @PageableDefault(page = 0, size = 10, sort = "postId", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(value = "userId") Integer userId) {
         Page<NoticeListResponse> dtoList;
-        try
-        {
+        try {
             Page<Notice> list = noticeService.getNotices(userId, pageable);
-            dtoList = list.map(new Function< Notice, NoticeListResponse> (){
+            dtoList = list.map(new Function<Notice, NoticeListResponse>() {
 
                 @Override
                 public NoticeListResponse apply(Notice entity) {
@@ -72,9 +71,7 @@ public class NoticeController {
                     return dto;
                 }
             });
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             return null;
         }
 
