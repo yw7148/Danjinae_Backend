@@ -52,7 +52,7 @@ public class NoticeController {
 
     @GetMapping("/get")
     public Page<NoticeListResponse> GetNoticeList(
-            @PageableDefault(page = 0, size = 10, sort = "postId", direction = Sort.Direction.DESC) Pageable pageable,
+            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(value = "userId") Integer userId) {
         Page<NoticeListResponse> dtoList;
         try {
