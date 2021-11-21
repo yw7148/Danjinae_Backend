@@ -45,7 +45,7 @@ public class CommentController {
                 dto.setCommentId(entity.getCommentId());
                 dto.setUserId(entity.getUserId());
                 dto.setComment(entity.getComment());
-
+                dto.setPostId(entity.getPost().getPostId());
                 return dto;
             }
         });
