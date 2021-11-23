@@ -2,6 +2,8 @@ package com.capstone.danjinae.user.controller;
 
 import com.capstone.danjinae.notice.DTO.NoticeRequest;
 import com.capstone.danjinae.notice.entity.Notice;
+import com.capstone.danjinae.user.DTO.AddUserRequest;
+import com.capstone.danjinae.user.DTO.AuthoUserRequest;
 import com.capstone.danjinae.user.DTO.UserRequest;
 import com.capstone.danjinae.user.entity.User;
 import com.capstone.danjinae.user.service.UserService;
@@ -10,10 +12,7 @@ import com.capstone.danjinae.vehicle.repository.VehicleRepository;
 import com.capstone.danjinae.vehicle.service.VehicleService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 
@@ -49,5 +48,17 @@ public class UserController {
         }
 
         return true;
+    }
+
+    //입주민 인증
+    @PostMapping("/authorization")
+    public Boolean authorization(@RequestBody AuthoUserRequest authoUser, @RequestParam("aptId") Integer aptId, @RequestBody AddUserRequest user){
+
+        if(authoUser.getName()==user.getName()&&authoUser.getBirth()==user.getBirth()&&authoUser.getPhone()==user.getPhone()&&aptId==user.getAptId()){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }
