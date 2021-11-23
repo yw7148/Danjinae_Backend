@@ -52,7 +52,6 @@ public class CommentController {
         return dtoList;
     }
 
-
     //댓글 작성
     @PostMapping("/add")
     private Boolean comment(@RequestBody CommentRequest comment, @RequestParam("postId") Integer postId) {
