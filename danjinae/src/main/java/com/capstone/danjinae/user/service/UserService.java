@@ -14,7 +14,6 @@ public class UserService {
 
     @Transactional
     public User writeUser(User user) {
-        user.resident();
         return userRepository.save(user);
     }
 

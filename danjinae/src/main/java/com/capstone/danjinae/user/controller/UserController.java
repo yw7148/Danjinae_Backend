@@ -4,6 +4,7 @@ import com.capstone.danjinae.notice.DTO.NoticeRequest;
 import com.capstone.danjinae.notice.entity.Notice;
 import com.capstone.danjinae.user.DTO.AddUserRequest;
 import com.capstone.danjinae.user.DTO.AuthoUserRequest;
+import com.capstone.danjinae.user.DTO.LoginUserRequest;
 import com.capstone.danjinae.user.DTO.UserRequest;
 import com.capstone.danjinae.user.entity.User;
 import com.capstone.danjinae.user.service.UserService;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/user")
@@ -34,6 +37,7 @@ public class UserController {
             User mgr = userService.getUser(user.getMgrId());
             toadd = User.builder().aptId(mgr.getAptId()).name(user.getName()).address(user.getAddress())
                     .birth(new Timestamp(user.getBirth().getTime())).phone(user.getPhone()).build();
+            toadd.Resident();
 
             User addedUser = userService.writeUser(toadd);
 
@@ -50,14 +54,23 @@ public class UserController {
         return true;
     }
 
-    //입주민 인증
+    // 입주민 인증
     @PostMapping("/authorization")
-    public Boolean authorization(@RequestBody AuthoUserRequest authoUser, @RequestParam("aptId") Integer aptId, @RequestBody AddUserRequest user){
-
-        if(authoUser.getName()==user.getName()&&authoUser.getBirth()==user.getBirth()&&authoUser.getPhone()==user.getPhone()&&aptId==user.getAptId()){
+    public Boolean authorization(@RequestBody LoginUserRequest request, HttpServletResponse response) {
+        try {
             return true;
+        } catch (Exception e) {
+            return false;
         }
-        else{
+    }
+
+    @PostMapping("/login")
+    public Boolean Login(@RequestBody LoginUserRequest request, HttpServletResponse response) {
+        try {
+            response.setHeader("ACCESS_TOKEN", "123124");
+            response.setHeader("REFRESH_TOKEN", "112233");
+            return true;
+        } catch (Exception e) {
             return false;
         }
     }
