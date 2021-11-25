@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,6 +29,9 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name="post_id")
     private Post post;
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
+    private List<NestedComment> nestedComments = new ArrayList<>();
 
     @Builder
     public Comment(Integer commentId, Integer userId, String comment, Integer postId) {

@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 //table
 @Entity
@@ -28,6 +30,9 @@ public class Post {
 
     @Column(name="apt_id")
     private Integer aptId;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private List<Comment> comments = new ArrayList<>();
 
     @Builder
     public Post(String title, String content, Integer userId, Integer aptId) {
