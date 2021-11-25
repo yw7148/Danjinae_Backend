@@ -56,7 +56,7 @@ public class UserController {
 
     // 입주민 인증
     @PostMapping("/authorization")
-    public Boolean authorization(@RequestBody LoginUserRequest request, HttpServletResponse response) {
+    public Boolean authorization(@RequestBody AuthoUserRequest request, HttpServletResponse response) {
         try {
             return true;
         } catch (Exception e) {
