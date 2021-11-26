@@ -1,5 +1,6 @@
 package com.capstone.danjinae.vehicle.service;
 
+import com.capstone.danjinae.post.entity.Post;
 import com.capstone.danjinae.vehicle.controller.VehicleController;
 import com.capstone.danjinae.vehicle.entity.Vehicle;
 import com.capstone.danjinae.vehicle.repository.VehicleRepository;
@@ -50,5 +51,11 @@ public class VehicleService {
 
         return vehicleRepository.findById(id).get();
     }
+
+    public Page<Vehicle> totalVehicleList(Pageable pageable){
+
+        return vehicleRepository.findAll(pageable);
+    }
+
 
 }
