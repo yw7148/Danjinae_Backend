@@ -7,10 +7,12 @@ import javax.persistence.Table;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "Salts")
 @Getter
+@NoArgsConstructor
 public class Salt {
     @Id
     @GeneratedValue

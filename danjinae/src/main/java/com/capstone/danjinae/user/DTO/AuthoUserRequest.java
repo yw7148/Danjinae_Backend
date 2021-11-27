@@ -8,7 +8,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class AuthoUserRequest {
-    private String aptId;
+    private Integer aptId;
     private String impId;
     private String phone;
     private String password;
