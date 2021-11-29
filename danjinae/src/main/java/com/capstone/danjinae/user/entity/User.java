@@ -31,17 +31,13 @@ public class User {
     private String address;
     @Column(name = "birth")
     private Timestamp birth;
-    @Column(name = "phone")
+    @Column(name = "phone", unique = true)
     private String phone;
     @Column(name = "manager")
     private boolean manager;
 
     @Column(name = "role")
     private UserRole role = UserRole.ROLE_NOT_PERMITTED;
-
-    public void resident() {
-        manager = false;
-    }
 
     @Builder
     public User(int aptId, String name, String address, Timestamp birth, String phone) {
@@ -59,6 +55,7 @@ public class User {
     }
 
     public void Resident() {
+        manager = false;
         this.role = UserRole.ROLE_RESIDENT;
     }
 
