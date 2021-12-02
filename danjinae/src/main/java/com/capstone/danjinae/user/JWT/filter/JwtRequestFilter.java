@@ -63,7 +63,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 refreshJwt = refreshToken;
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         try {

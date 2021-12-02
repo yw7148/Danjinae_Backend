@@ -32,7 +32,7 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/user/authorization").permitAll().anyRequest().permitAll().and()
+        http.authorizeRequests().antMatchers("/user/**").permitAll().antMatchers("/swagger-ui.html").permitAll().anyRequest().authenticated().and()
                 .httpBasic().and().csrf().disable();
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
