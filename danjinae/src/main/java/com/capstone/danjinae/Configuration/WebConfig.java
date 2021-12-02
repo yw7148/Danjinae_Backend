@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -32,10 +33,15 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/user/**").permitAll().antMatchers("/swagger-ui.html").permitAll().anyRequest().authenticated().and()
+        http.authorizeRequests().antMatchers("/v2/api-docs", "api/v2/**","/configuration/ui",
+                                "/swagger-resources/**", "/health",
+                                "/swagger-ui.html", "/webjars/**","/swagger/**").permitAll();
+
+        http.authorizeRequests().antMatchers("/user/**").permitAll().anyRequest().authenticated().and()
                 .httpBasic().and().csrf().disable();
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
+
 
 }

@@ -22,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import io.jsonwebtoken.Jwts;
@@ -52,6 +53,7 @@ public class UserController {
     private ApartService apartService;
 
     // 입주민 등록
+    @Secured(value = "ROLE_RESIDENT")
     @PostMapping("/add")
     public Boolean inputUser(@RequestBody UserRequest user) {
         try {
@@ -76,6 +78,7 @@ public class UserController {
         return true;
     }
 
+    @Secured(value = {"ROLE_RESIDENT", "ROLE_MANAGER"})
     @GetMapping("/aptchoice")
     public Page<AptListResponse> chooseApt(
             @PageableDefault(page = 0, size = 10, sort = "aptId", direction = Sort.Direction.DESC) Pageable pageable,
