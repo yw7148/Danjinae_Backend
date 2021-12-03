@@ -10,7 +10,9 @@ import com.capstone.danjinae.user.DTO.UserRequest;
 import com.capstone.danjinae.user.JWT.service.JwtService;
 import com.capstone.danjinae.user.entity.Apartment;
 import com.capstone.danjinae.user.entity.User;
+import com.capstone.danjinae.user.entity.CertificateEmployment;
 import com.capstone.danjinae.user.service.ApartService;
+import com.capstone.danjinae.user.service.CertificationService;
 import com.capstone.danjinae.user.service.LoginService;
 import com.capstone.danjinae.user.service.UserService;
 import com.capstone.danjinae.vehicle.entity.Vehicle;
@@ -26,6 +28,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import io.jsonwebtoken.Jwts;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -51,6 +54,9 @@ public class UserController {
 
     @Autowired
     private ApartService apartService;
+
+    @Autowired
+    private CertificationService certificationService;
 
     // 입주민 등록
     @Secured(value = "ROLE_RESIDENT")
@@ -142,6 +148,23 @@ public class UserController {
             response.setHeader(jwtService.REFRESH_TOKEN_NAME, refreshJwt);
             return true;
         } catch (Exception e) {
+            return false;
+        }
+    }
+
+    //재직증명서 업로드
+    @PostMapping("/upload")
+    public Boolean upload(@RequestParam(value = "userId") Integer userId,MultipartFile file) throws Exception {
+
+        try {
+            CertificateEmployment certification;
+            certification= CertificateEmployment.builder().userId(userId).build();
+            certificationService.upload(certification, file);
+
+
+            return true;
+        }
+        catch (Exception e){
             return false;
         }
     }
