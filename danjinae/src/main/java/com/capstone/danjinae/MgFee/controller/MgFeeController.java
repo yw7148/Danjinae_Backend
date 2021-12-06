@@ -112,5 +112,4 @@ public class MgFeeController {
 
         return true;
     }
-
 }

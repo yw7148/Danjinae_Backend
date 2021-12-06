@@ -38,6 +38,15 @@ public class NoticeService {
         return noticeRepository.findByAptId(aptId, pageable);
     }
 
+    public Boolean SetNociesRead(Integer userId, Page<Notice> notices)
+    {
+        for (Notice notice : notices.getContent()) {
+            NoticeReadHistory read = NoticeReadHistory.builder().userId(userId).noticeId(notice.getId()).build();
+            noticeReadRepository.save(read);
+        }
+
+        return true;
+    }
     public Boolean checkNoticeRead(Integer userId, Integer noticeId)
     {
         var result = noticeReadRepository.findByUserIdAndNoticeId(userId, noticeId);
