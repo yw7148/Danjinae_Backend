@@ -195,9 +195,9 @@ public class UserController {
         }
     }
 
+    @Secured(value = "USER_RESIDENT")
     @PostMapping("/newfcmtoken")
-    @PutMapping("/newfcmtoken")
-    public Boolean NewUserFCMToken(Principal user, FCMToken token)
+    public Boolean NewUserFCMToken(Principal user, @RequestBody FCMToken token)
     {
         try{
             Integer userId = userService.UserInfoWithPhone(user.getName()).getId();
