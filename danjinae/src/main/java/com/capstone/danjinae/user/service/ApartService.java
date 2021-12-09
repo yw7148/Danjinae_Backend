@@ -15,4 +15,9 @@ public class ApartService {
     public Page<Apartment> searchAddress(String address, Pageable pageable) {
         return apartRepository.findByAddressContaining(address, pageable);
     }
+
+    public Apartment getApartment(Integer id)
+    {
+        return apartRepository.getById(id);
+    }
 }

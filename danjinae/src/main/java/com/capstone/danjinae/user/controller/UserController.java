@@ -5,7 +5,9 @@ import com.capstone.danjinae.notice.entity.Notice;
 import com.capstone.danjinae.user.DTO.AddUserRequest;
 import com.capstone.danjinae.user.DTO.AptListResponse;
 import com.capstone.danjinae.user.DTO.AuthoUserRequest;
+import com.capstone.danjinae.user.DTO.FCMToken;
 import com.capstone.danjinae.user.DTO.LoginUserRequest;
+import com.capstone.danjinae.user.DTO.UserInfo;
 import com.capstone.danjinae.user.DTO.UserRequest;
 import com.capstone.danjinae.user.JWT.service.JwtService;
 import com.capstone.danjinae.user.entity.Apartment;
@@ -30,8 +32,10 @@ import org.springframework.web.bind.annotation.*;
 import io.jsonwebtoken.Jwts;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 import javax.servlet.http.HttpServletResponse;
@@ -152,10 +156,8 @@ public class UserController {
         }
     }
 
-    //재직증명서 업로드
     @PostMapping("/upload")
     public Boolean upload(@RequestParam(value = "userId") Integer userId,MultipartFile file) throws Exception {
-
         try {
             CertificateEmployment certification;
             certification= CertificateEmployment.builder().userId(userId).build();
@@ -165,6 +167,43 @@ public class UserController {
             return true;
         }
         catch (Exception e){
+            return false;
+        }
+    }
+
+    @GetMapping("/myinfo")
+    public UserInfo userInfo(Principal user)
+    {
+        try{
+            User userinfo = userService.UserInfoWithPhone(user.getName());
+            UserInfo returnDto = new UserInfo();
+            returnDto.setAddress(userinfo.getAddress());
+            returnDto.setBirth(userinfo.getBirth());
+            returnDto.setManager(userinfo.isManager());
+            returnDto.setName(userinfo.getName());
+            returnDto.setPhone(userinfo.getPhone());
+            returnDto.setId(userinfo.getId());
+
+            Apartment aptInfo = apartService.getApartment(userinfo.getAptId());
+            returnDto.setAptname(aptInfo.getName());
+            returnDto.setAddress(aptInfo.getAddress());
+
+            return returnDto;
+        }catch(Exception e) 
+        {
+            return null;
+        }
+    }
+
+    @PostMapping("/newfcmtoken")
+    @PutMapping("/newfcmtoken")
+    public Boolean NewUserFCMToken(Principal user, FCMToken token)
+    {
+        try{
+            Integer userId = userService.UserInfoWithPhone(user.getName()).getId();
+            return userService.UserNewFCMToken(userId, token.getToken());
+        }catch(Exception e) 
+        {
             return false;
         }
     }
