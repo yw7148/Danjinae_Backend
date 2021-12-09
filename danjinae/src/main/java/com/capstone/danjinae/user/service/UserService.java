@@ -34,7 +34,7 @@ public class UserService {
         return userRepository.findByPhone(phone);
     }
 
-    public Boolean UserNewToken(Integer userId, String token)
+    public Boolean UserNewFCMToken(Integer userId, String token)
     {
         UserFCMToken newToken = UserFCMToken.builder().userId(userId).token(token).build();
         userFCMTokenRepository.save(newToken);
