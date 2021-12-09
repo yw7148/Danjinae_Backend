@@ -132,7 +132,31 @@ public class VehicleController {
         return dtoList;
     }
 
+    //차량 삭제
+    @DeleteMapping("/delete")
+    public Page<VehicleResponse> deleteVehicle(@RequestParam("id") Integer id, @PageableDefault(page=0,size=10,sort="id",direction= Sort.Direction.DESC) Pageable pageable) {
+
+        vehicleService.deleteVehicle(id);
+
+        Page<VehicleResponse> dtoList;
+        Page<Vehicle> list = null;
+        list = vehicleService.totalVehicleList(pageable);
+
+        dtoList = list.map(new Function<Vehicle, VehicleResponse>() {
+            @Override
+            public VehicleResponse apply(Vehicle entity) {
+                VehicleResponse dto = new VehicleResponse();
+                dto.setVehicleId(entity.getId());
+                dto.setUserId(entity.getUserId());
+                dto.setPhone(entity.getPhone());
+                dto.setGuest(entity.getGuest());
+                dto.setStartDate(entity.getStartDate());
+                dto.setEndDate(entity.getEndDate());
+                dto.setNumber(entity.getNumber());
+                return dto;
+            }
+        });
+        return dtoList;
+    }
 }
-
-
 

@@ -57,5 +57,11 @@ public class VehicleService {
         return vehicleRepository.findAll(pageable);
     }
 
+    @Transactional
+    public void deleteVehicle(Integer id){
+
+        vehicleRepository.deleteById(id);
+
+    }
 
 }
