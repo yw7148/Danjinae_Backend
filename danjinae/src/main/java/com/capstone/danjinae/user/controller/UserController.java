@@ -123,6 +123,7 @@ public class UserController {
     public Boolean authorization(@RequestBody AuthoUserRequest request, HttpServletResponse response) {
         try {
             User newUser = loginService.CheckResident(request);
+            
             if (newUser == null)
                 return false;
             else
@@ -148,8 +149,8 @@ public class UserController {
             String token = jwtService.generateToken(request.getPhone());
             String refreshJwt = jwtService.generateRefreshToken(user);
 
-            response.setHeader(jwtService.ACCESS_TOKEN_NAME, token);
-            response.setHeader(jwtService.REFRESH_TOKEN_NAME, refreshJwt);
+            response.setHeader(JwtService.ACCESS_TOKEN_NAME, token);
+            response.setHeader(JwtService.REFRESH_TOKEN_NAME, refreshJwt);
             return true;
         } catch (Exception e) {
             return false;
