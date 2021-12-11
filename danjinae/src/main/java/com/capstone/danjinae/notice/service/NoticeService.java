@@ -42,7 +42,7 @@ public class NoticeService {
     {
         for (Notice notice : notices.getContent()) {
             NoticeReadHistory read = NoticeReadHistory.builder().userId(userId).noticeId(notice.getId()).build();
-            if(noticeReadRepository.findByUserIdAndNoticeId(userId, notice.getId()) == null);
+            if(noticeReadRepository.findAllByUserIdAndNoticeId(userId, notice.getId()) == null);
                 noticeReadRepository.save(read);
         }
 
@@ -51,7 +51,7 @@ public class NoticeService {
     
     public Boolean checkNoticeRead(Integer userId, Integer noticeId)
     {
-        var result = noticeReadRepository.findByUserIdAndNoticeId(userId, noticeId);
+        var result = noticeReadRepository.findAllByUserIdAndNoticeId(userId, noticeId);
         return (result != null);
     }
 
