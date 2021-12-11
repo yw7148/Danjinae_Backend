@@ -72,7 +72,7 @@ public class NoticeController {
                 }
             });
 
-            noticeService.SetNociesRead(userId, list);
+            noticeService.SetNociesRead(userId, dtoList);
         } catch (Exception e) {
             return null;
         }
