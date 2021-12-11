@@ -1,5 +1,6 @@
 package com.capstone.danjinae.notice.controller;
 
+import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.function.Function;
@@ -8,6 +9,9 @@ import com.capstone.danjinae.notice.DTO.NoticeListResponse;
 import com.capstone.danjinae.notice.DTO.NoticeRequest;
 import com.capstone.danjinae.notice.entity.Notice;
 import com.capstone.danjinae.notice.service.NoticeService;
+import com.capstone.danjinae.user.entity.User;
+import com.capstone.danjinae.user.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,11 +27,17 @@ public class NoticeController {
     @Autowired
     private NoticeService noticeService;
 
+    @Autowired
+    private UserService userService;
+
     // 공지사항 작성
     @PostMapping("/add")
-    public Boolean postNotice(@RequestBody NoticeRequest notice) {
+    public Boolean postNotice(Principal user, @RequestBody NoticeRequest notice) {
         Notice toadd;
         try {
+            User aptUser = userService.UserInfoWithPhone(user.getName());
+            notice.setAptId(aptUser.getAptId());
+
             this.setDefaultNoriceRequest(notice);
             toadd = Notice.builder().aptId(notice.getAptId()).content(notice.getContent())
                     .startDate(new Timestamp(notice.getStartDate().getTime()))
@@ -52,10 +62,15 @@ public class NoticeController {
 
     @GetMapping("/get")
     public Page<NoticeListResponse> GetNoticeList(
+            Principal user,
             @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(value = "userId") Integer userId) {
+            @RequestParam(value = "userId", required = false) Integer userId) {
         Page<NoticeListResponse> dtoList;
+
         try {
+            User aptUser = userService.UserInfoWithPhone(user.getName());
+            userId = aptUser.getId();
+
             Page<Notice> list = noticeService.getNotices(userId, pageable);
             dtoList = list.map(new Function<Notice, NoticeListResponse>() {
 
@@ -66,7 +81,7 @@ public class NoticeController {
                     dto.setContent(entity.getContent());
                     dto.setEndDate(entity.getEndDate());
                     dto.setStartDate(entity.getStartDate());
-                    dto.setRead(noticeService.checkNoticeRead(userId, entity.getId()));
+                    dto.setRead(noticeService.checkNoticeRead(aptUser.getId(), entity.getId()));
                     dto.setId(entity.getId());
                     return dto;
                 }

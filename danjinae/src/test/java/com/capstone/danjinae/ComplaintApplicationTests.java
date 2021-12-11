@@ -47,7 +47,6 @@ class NoticeApplicationTests {
     void NewComplaintTest() {
         final NewComplaintRequest newComplaint = NewComplaint();
 
-        Boolean result = complaintController.addNewComplaint(newComplaint);
     }
 
     @Test
