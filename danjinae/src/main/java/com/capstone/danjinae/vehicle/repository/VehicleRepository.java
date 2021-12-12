@@ -11,5 +11,7 @@ import java.util.Optional;
 @Repository
 public interface VehicleRepository extends JpaRepository<Vehicle,Integer> {
 
-    Page<Vehicle> findByNumberContaining(String number, Pageable pageable);
+    Page<Vehicle> findByAcceptAndAptIdAndNumberContaining(Boolean accept, Integer aptId, String number, Pageable pageable);
+
+    Page<Vehicle> findByAcceptAndAptId(Boolean accept, Integer aptId, Pageable pageable);
 }

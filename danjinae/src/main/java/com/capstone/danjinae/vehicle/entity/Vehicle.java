@@ -27,10 +27,17 @@ public class Vehicle {
     @Column(name="start_date")
     private Timestamp startDate;
 
+    @Column(name = "apt_id")
+    private Integer aptId;
+
     @Column(name="end_date")
     private Timestamp endDate;
+
     @Column(name="number")
     private String number; //차량 번호
+
+    @Column(name = "accept")
+    private Boolean accept;
 
     //set guest
     public void guest() {
@@ -38,12 +45,13 @@ public class Vehicle {
     }
 
     public void resident() {
+        accept = true;
         guest=false;
     }
 
     @Builder
-    public Vehicle(Integer userId,String phone,Timestamp startDate,Timestamp endDate,String number){
-
+    public Vehicle(Integer userId, Integer aptId,String phone,Timestamp startDate,Timestamp endDate,String number){
+        this.aptId = aptId;
         this.userId=userId;
         this.phone=phone;
         this.startDate=startDate;
@@ -53,6 +61,11 @@ public class Vehicle {
 
     public boolean getGuest() {
         return guest;
+    }
+
+    public void AcceptGuest()
+    {
+        this.accept = true;
     }
 }
 

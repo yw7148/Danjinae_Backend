@@ -40,9 +40,9 @@ public class VehicleService {
     }
 
     @Transactional
-    public Page<Vehicle> search(String number,Pageable pageable){
+    public Page<Vehicle> search(Integer aptId, String number,Pageable pageable){
 
-        return vehicleRepository.findByNumberContaining(number, pageable);
+        return vehicleRepository.findByAcceptAndAptIdAndNumberContaining(true, aptId, number, pageable);
 
     }
 
@@ -52,16 +52,29 @@ public class VehicleService {
         return vehicleRepository.findById(id).get();
     }
 
-    public Page<Vehicle> totalVehicleList(Pageable pageable){
+    public Page<Vehicle> NotAcceptedVahicles(Integer aptId, Pageable pageable){
 
-        return vehicleRepository.findAll(pageable);
+        return vehicleRepository.findByAcceptAndAptId(false, aptId, pageable);
+    }
+
+    public Page<Vehicle> totalVehicleList(Integer aptId, Pageable pageable){
+
+        return vehicleRepository.findByAcceptAndAptId(true, aptId, pageable);
+    }
+
+    public Vehicle AcceptVehicle(Integer vehicleId)
+    {
+        var vehicle = vehicleRepository.getById(vehicleId);
+        vehicle.AcceptGuest();
+        vehicleRepository.save(vehicle);
+
+        return vehicle;
     }
 
     @Transactional
-    public void deleteVehicle(Integer id){
-
+    public void deleteVehicle(Integer id)
+    {
         vehicleRepository.deleteById(id);
-
     }
 
 }

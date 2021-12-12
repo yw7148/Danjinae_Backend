@@ -22,9 +22,9 @@ public class PostService {
     }
 
     @Transactional
-    public Page<Post> totalPostList(Pageable pageable){
+    public Page<Post> totalPostList(Integer aptId, Pageable pageable){
 
-        return postRepository.findAll(pageable);
+        return postRepository.findByAptId(aptId, pageable);
     }
 
     @Transactional
@@ -41,8 +41,8 @@ public class PostService {
     }
 
     @Transactional
-    public Page<Post> searchKeyword(String keyword,Pageable pageable){
+    public Page<Post> searchKeyword(Integer aptId,String keyword,Pageable pageable){
 
-        return postRepository.findByTitleContaining(keyword, pageable);
+        return postRepository.findByAptIdAndTitleContaining(aptId, keyword, pageable);
     }
 }

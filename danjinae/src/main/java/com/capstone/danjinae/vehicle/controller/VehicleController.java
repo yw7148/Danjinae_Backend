@@ -2,6 +2,7 @@ package com.capstone.danjinae.vehicle.controller;
 
 import com.capstone.danjinae.post.DTO.postDTO.PostResponse;
 import com.capstone.danjinae.post.entity.Post;
+import com.capstone.danjinae.user.entity.User;
 import com.capstone.danjinae.user.service.UserService;
 import com.capstone.danjinae.vehicle.DTO.VehicleInfoResponse;
 import com.capstone.danjinae.vehicle.DTO.VehicleRequest;
@@ -16,6 +17,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.function.Function;
 
@@ -31,12 +33,16 @@ public class VehicleController {
 
     // 차량 등록
     @PostMapping("/resident")
-    public Boolean inputResident(@RequestBody VehicleRequest vehicle) {
+    public Boolean inputResident(
+        Principal user,
+        @RequestBody VehicleRequest vehicle) {
 
         Vehicle toadd;
         try {
+            User aptUser = userService.UserInfoWithPhone(user.getName());
+            Integer aptId = aptUser.getAptId();
             toadd = Vehicle.builder().userId(vehicle.getUserId()).phone(vehicle.getPhone())
-                    .startDate(new Timestamp(vehicle.getStartDate().getTime()))
+                    .startDate(new Timestamp(vehicle.getStartDate().getTime())).aptId(aptId)
                     .endDate(new Timestamp(vehicle.getEndDate().getTime())).number(vehicle.getNumber()).build();
 
             vehicleService.writeResidnet(toadd);
@@ -48,12 +54,16 @@ public class VehicleController {
 
     // 게스트 차량 등록
     @PostMapping("/guest")
-    public Boolean inputGuest(@RequestBody VehicleRequest vehicle) {
+    public Boolean inputGuest(
+        Principal user,
+        @RequestBody VehicleRequest vehicle) {
 
         Vehicle toadd;
         try {
+            User aptUser = userService.UserInfoWithPhone(user.getName());
+            Integer aptId = aptUser.getAptId();
             toadd = Vehicle.builder().userId(vehicle.getUserId()).phone(vehicle.getPhone())
-                    .startDate(new Timestamp(vehicle.getStartDate().getTime()))
+                    .startDate(new Timestamp(vehicle.getStartDate().getTime())).aptId(aptId)
                     .endDate(new Timestamp(vehicle.getEndDate().getTime())).number(vehicle.getNumber()).build();
 
             vehicleService.writeGuest(toadd);
@@ -66,12 +76,15 @@ public class VehicleController {
     // 선택된 차량 리스트
     @GetMapping("/select/list")
     public Page<VehicleResponse> selectList(
+            Principal user,
             @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam("number") String number) {
         Page<VehicleResponse> dtoList;
         Page<Vehicle> list = null;
 
-        list = vehicleService.search(number, pageable);
+        User aptUser = userService.UserInfoWithPhone(user.getName());
+        Integer aptId = aptUser.getAptId();
+        list = vehicleService.search(aptId, number, pageable);
 
         dtoList = list.map(new Function<Vehicle, VehicleResponse>() {
             @Override
@@ -88,6 +101,18 @@ public class VehicleController {
             }
         });
         return dtoList;
+    }
+
+    @PutMapping("/accept")
+    public Boolean acceptGuestVehicle(@RequestParam("vehicleId") Integer id)
+    {
+        try{
+            vehicleService.AcceptVehicle(id);
+            return true;
+        }catch(Exception e)
+        {
+            return false;
+        }
     }
 
     // 선택된 차량 세부정보
@@ -109,11 +134,15 @@ public class VehicleController {
 
     //전체 차량 리스트
     @GetMapping("/total-list")
-    public Page<VehicleResponse> totalList(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    public Page<VehicleResponse> totalList(
+        Principal user,
+        @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<VehicleResponse> dtoList;
         Page<Vehicle> list = null;
-
-        list = vehicleService.totalVehicleList(pageable);
+        
+        User aptUser = userService.UserInfoWithPhone(user.getName());
+        Integer aptId = aptUser.getAptId();
+        list = vehicleService.totalVehicleList(aptId, pageable);
 
         dtoList = list.map(new Function<Vehicle, VehicleResponse>() {
             @Override
@@ -132,15 +161,56 @@ public class VehicleController {
         return dtoList;
     }
 
+    @GetMapping("/notaccepted")
+    public Page<VehicleResponse> notAccepted(
+        Principal user,
+        @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<VehicleResponse> dtoList = null;
+        Page<Vehicle> list = null;
+
+        try{
+            User aptUser = userService.UserInfoWithPhone(user.getName());
+            Integer aptId = aptUser.getAptId();
+            list = vehicleService.NotAcceptedVahicles(aptId, pageable);
+
+            dtoList = list.map(new Function<Vehicle, VehicleResponse>() {
+                @Override
+                public VehicleResponse apply(Vehicle entity) {
+                    VehicleResponse dto = new VehicleResponse();
+                    dto.setVehicleId(entity.getId());
+                    dto.setUserId(entity.getUserId());
+                    dto.setPhone(entity.getPhone());
+                    dto.setGuest(entity.getGuest());
+                    dto.setStartDate(entity.getStartDate());
+                    dto.setEndDate(entity.getEndDate());
+                    dto.setNumber(entity.getNumber());
+                    return dto;
+                }
+            });
+            
+            return dtoList;
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     //차량 삭제
     @DeleteMapping("/delete")
-    public Page<VehicleResponse> deleteVehicle(@RequestParam("id") Integer id, @PageableDefault(page=0,size=10,sort="id",direction= Sort.Direction.DESC) Pageable pageable) {
+    public Page<VehicleResponse> deleteVehicle(
+        Principal user,
+        @RequestParam("id") Integer id, 
+        @PageableDefault(page=0,size=10,sort="id",direction= Sort.Direction.DESC) Pageable pageable) {
+
+        User aptUser = userService.UserInfoWithPhone(user.getName());
+        Integer aptId = aptUser.getAptId();
 
         vehicleService.deleteVehicle(id);
 
         Page<VehicleResponse> dtoList;
         Page<Vehicle> list = null;
-        list = vehicleService.totalVehicleList(pageable);
+        list = vehicleService.totalVehicleList(aptId, pageable);
 
         dtoList = list.map(new Function<Vehicle, VehicleResponse>() {
             @Override
