@@ -1,5 +1,6 @@
 package com.capstone.danjinae.vehicle.repository;
 
+import com.capstone.danjinae.user.entity.User;
 import com.capstone.danjinae.vehicle.entity.Vehicle;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,4 +13,6 @@ import java.util.Optional;
 public interface VehicleRepository extends JpaRepository<Vehicle,Integer> {
 
     Page<Vehicle> findByNumberContaining(String number, Pageable pageable);
+
+    Page<Vehicle> findByPhone(String phone,Pageable pageable);
 }

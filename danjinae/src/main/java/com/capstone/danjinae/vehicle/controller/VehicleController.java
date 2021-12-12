@@ -2,6 +2,7 @@ package com.capstone.danjinae.vehicle.controller;
 
 import com.capstone.danjinae.post.DTO.postDTO.PostResponse;
 import com.capstone.danjinae.post.entity.Post;
+import com.capstone.danjinae.user.entity.User;
 import com.capstone.danjinae.user.service.UserService;
 import com.capstone.danjinae.vehicle.DTO.VehicleInfoResponse;
 import com.capstone.danjinae.vehicle.DTO.VehicleRequest;
@@ -16,6 +17,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.function.Function;
 
@@ -132,9 +134,8 @@ public class VehicleController {
         return dtoList;
     }
 
-    //차량 삭제
     @DeleteMapping("/delete")
-    public Page<VehicleResponse> deleteVehicle(@RequestParam("id") Integer id, @PageableDefault(page=0,size=10,sort="id",direction= Sort.Direction.DESC) Pageable pageable) {
+    public Page<VehicleResponse> deleteVehicle(@RequestParam("id") Integer id, @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
         vehicleService.deleteVehicle(id);
 
@@ -158,5 +159,35 @@ public class VehicleController {
         });
         return dtoList;
     }
+
+    //내가 추가한 차량 리스트
+    @GetMapping("/myvehicle")
+    public Page<VehicleResponse> myInfo(Principal user, @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+
+        try {
+            Page<VehicleResponse> dtoList;
+            Page<Vehicle> list = vehicleService.UserInfoWithPhone(user.getName(), pageable);
+
+            dtoList = list.map(new Function<Vehicle, VehicleResponse>() {
+                @Override
+                public VehicleResponse apply(Vehicle entity) {
+                    VehicleResponse dto = new VehicleResponse();
+                    dto.setVehicleId(entity.getId());
+                    dto.setUserId(entity.getUserId());
+                    dto.setPhone(entity.getPhone());
+                    dto.setGuest(entity.getGuest());
+                    dto.setStartDate(entity.getStartDate());
+                    dto.setEndDate(entity.getEndDate());
+                    dto.setNumber(entity.getNumber());
+                    return dto;
+                }
+            });
+            return dtoList;
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }
 
