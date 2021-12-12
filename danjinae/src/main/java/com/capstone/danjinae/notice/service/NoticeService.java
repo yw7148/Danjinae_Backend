@@ -1,6 +1,7 @@
 
 package com.capstone.danjinae.notice.service;
 
+import com.capstone.danjinae.notice.DTO.NoticeListResponse;
 import com.capstone.danjinae.notice.entity.Notice;
 import com.capstone.danjinae.notice.entity.NoticeReadHistory;
 import com.capstone.danjinae.notice.repository.NoticeReadRepository;
@@ -38,12 +39,14 @@ public class NoticeService {
         return noticeRepository.findByAptId(aptId, pageable);
     }
 
-    public Boolean SetNociesRead(Integer userId, Page<Notice> notices)
+    public Boolean SetNociesRead(Integer userId, Page<NoticeListResponse> notices)
     {
-        for (Notice notice : notices.getContent()) {
-            NoticeReadHistory read = NoticeReadHistory.builder().userId(userId).noticeId(notice.getId()).build();
-            if(noticeReadRepository.findByUserIdAndNoticeId(userId, notice.getId()) == null);
+        for (NoticeListResponse notice : notices.getContent()) {
+            if(!notice.getRead())
+            {
+                NoticeReadHistory read = NoticeReadHistory.builder().userId(userId).noticeId(notice.getId()).build();
                 noticeReadRepository.save(read);
+            }
         }
 
         return true;
@@ -51,7 +54,7 @@ public class NoticeService {
     
     public Boolean checkNoticeRead(Integer userId, Integer noticeId)
     {
-        var result = noticeReadRepository.findByUserIdAndNoticeId(userId, noticeId);
+        var result = noticeReadRepository.findAllByUserIdAndNoticeId(userId, noticeId);
         return (result != null);
     }
 
