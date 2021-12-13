@@ -30,6 +30,8 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import io.jsonwebtoken.Jwts;
+import lombok.val;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
@@ -38,6 +40,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
@@ -163,6 +166,17 @@ public class UserController {
         }
     }
 
+    @PostMapping("/logout")
+    @Secured(value = {"USER_RESIDENT", "USER_MANAGER", "USER_ADMIN"})
+    public Boolean Logout(HttpServletRequest req, @RequestBody LoginUserRequest request, HttpServletResponse response) {
+        try {
+            String refreshtoken = req.getHeader(JwtService.REFRESH_TOKEN_NAME);
+            return jwtService.deleteToken(refreshtoken);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     @PostMapping("/upload")
     public Boolean upload(Principal user, @RequestParam(value = "userId", required = false) Integer userId,MultipartFile file) throws Exception {
         try {
@@ -204,6 +218,7 @@ public class UserController {
         }
     }
 
+
     @Secured(value = "USER_RESIDENT")
     @PostMapping("/newfcmtoken")
     public Boolean NewUserFCMToken(Principal user, @RequestBody FCMToken token)
@@ -215,5 +230,12 @@ public class UserController {
         {
             return false;
         }
+    }
+
+    @GetMapping("/validate")
+    @Secured(value = {"USER_RESIDENT", "USER_MANAGER", "USER_ADMIN"})
+    public Boolean ValidateUser()
+    {
+        return true;
     }
 }
