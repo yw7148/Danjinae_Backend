@@ -1,32 +1,28 @@
-package com.capstone.danjinae.fcm.controller;
+package com.capstone.danjinae.fcm.service;
+
+import org.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import com.capstone.danjinae.fcm.service.FcmService;
-import com.capstone.danjinae.fcm.service.FcmNotification;
-import org.json.JSONException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.bind.annotation.*;
-
-@RestController
-@RequestMapping("/notice")
-public class FcmController {
+@Service
+public class FcmPush {
 
     @Autowired
     FcmService fcmService;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @GetMapping(value = "/push")
-    public @ResponseBody
-    ResponseEntity<String> push(String token,String content) throws JSONException, InterruptedException, UnsupportedEncodingException {
-        String notification = FcmNotification.NotificationJson(token, content );
+    public ResponseEntity<String> push(String token, String content) throws JSONException, InterruptedException, UnsupportedEncodingException {
+        String notification = FcmNotification.NotificationJson(token,content);
 
         HttpEntity<String> request = new HttpEntity<>(notification);
 
