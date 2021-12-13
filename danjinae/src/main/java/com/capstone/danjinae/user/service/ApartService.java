@@ -12,8 +12,8 @@ public class ApartService {
     @Autowired
     ApartRepository apartRepository;
 
-    public Page<Apartment> searchAddress(String address, Pageable pageable) {
-        return apartRepository.findByAddressContaining(address, pageable);
+    public Page<Apartment> searchAddress(String address, String name, Pageable pageable) {
+        return apartRepository.findByAddressContainingAndNameContaining(address, name, pageable);
     }
 
     public Apartment getApartment(Integer id)

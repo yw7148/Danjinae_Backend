@@ -93,14 +93,18 @@ public class UserController {
     @GetMapping("/aptchoice")
     public Page<AptListResponse> chooseApt(
             @PageableDefault(page = 0, size = 10, sort = "aptId", direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(value = "address", required = false) String address) {
+            @RequestParam(value = "address", required = false) String address,
+            @RequestParam(value = "name", required = false) String name) {
 
         Page<AptListResponse> dtolist;
         try {
             if (address == null) {
                 address = "";
             }
-            var list = apartService.searchAddress(address, pageable);
+            if(name == null){
+                name = "";
+            }
+            var list = apartService.searchAddress(address, name, pageable);
             dtolist = list.map(new Function<Apartment, AptListResponse>() {
 
                 @Override

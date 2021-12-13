@@ -79,7 +79,7 @@ public class MgFeeController {
     public Page<ManagerMgFeeResponse> managerMgFeeList(
             Principal user,
             @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(value = "aptId") Integer aptId) {
+            @RequestParam(value = "aptId", required = false) Integer aptId) {
 
         Page<ManagerMgFeeResponse> dtolist;
         try {

@@ -87,7 +87,7 @@ public class ComplaintController {
     public Page<ComplaintListResponse> getManagerComplaintList(
             Principal user,
             @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-            @PathVariable Integer aptid) {
+            @PathVariable(required = false) Integer aptid) {
 
         Page<ComplaintListResponse> list;
         try {

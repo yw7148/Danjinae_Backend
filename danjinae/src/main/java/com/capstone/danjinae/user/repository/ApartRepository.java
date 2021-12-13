@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ApartRepository extends JpaRepository<Apartment, Integer> {
-    Page<Apartment> findByAddressContaining(String address, Pageable pageable);
+    Page<Apartment> findByAddressContainingAndNameContaining(String address, String name, Pageable pageable);
 }
