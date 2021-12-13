@@ -86,7 +86,7 @@ public class ComplaintController {
         }
     }
 
-    @GetMapping(value = "/get/{aptid}")
+    @GetMapping(value = {"/get/{aptid}", "/get"})
     public Page<ComplaintListResponse> getManagerComplaintList(
             Principal user,
             @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
