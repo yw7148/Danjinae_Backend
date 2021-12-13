@@ -92,7 +92,6 @@ public class UserController {
         return true;
     }
 
-    @Secured(value = {"ROLE_RESIDENT", "ROLE_MANAGER"})
     @GetMapping("/aptchoice")
     public Page<AptListResponse> chooseApt(
             @PageableDefault(page = 0, size = 10, sort = "aptId", direction = Sort.Direction.DESC) Pageable pageable,

@@ -37,7 +37,7 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
                                 "/swagger-resources/**", "/health", "/swagger-ui/**",
                                 "/swagger-ui.html", "/webjars/**","/swagger/**").permitAll();
 
-        http.authorizeRequests().antMatchers("/user/**").permitAll().anyRequest().authenticated().and()
+        http.authorizeRequests().antMatchers("/user/login", "/user/signup", "/user/aptchoice", "/user/authorization", "/user/upload").permitAll().anyRequest().authenticated().and()
                 .httpBasic().and().csrf().disable();
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
