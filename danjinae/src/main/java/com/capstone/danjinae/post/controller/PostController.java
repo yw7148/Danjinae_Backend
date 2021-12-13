@@ -1,9 +1,13 @@
 package com.capstone.danjinae.post.controller;
+
 import com.capstone.danjinae.post.DTO.postDTO.PostRequest;
 import com.capstone.danjinae.post.DTO.postDTO.PostResponse;
 import com.capstone.danjinae.post.entity.Post;
 import com.capstone.danjinae.post.service.CommentService;
 import com.capstone.danjinae.post.service.PostService;
+import com.capstone.danjinae.user.entity.User;
+import com.capstone.danjinae.user.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.function.Function;
 
 @RestController
@@ -23,9 +28,12 @@ public class PostController {
     @Autowired
     private CommentService commentService;
 
-    //게시물 등록
+    @Autowired
+    private UserService userService;
+
+    // 게시물 등록
     @PostMapping("/add")
-    public Boolean post(@RequestBody PostRequest post){
+    public Boolean post(@RequestBody PostRequest post) {
         Post toadd;
         try {
             toadd = Post.builder().title(post.getTitle()).content(post.getContent()).userId(post.getUserId())
@@ -38,20 +46,25 @@ public class PostController {
         return true;
     }
 
-    //게시물 전체 리스트
+    // 게시물 전체 리스트
     @GetMapping("/total-list")
-    public Page<PostResponse> totalList(@PageableDefault(page=0,size=10,sort="postId",direction= Sort.Direction.DESC) Pageable pageable,@RequestParam(value="keyword",required = false) String keyword){
+    public Page<PostResponse> totalList(
+            Principal user,
+            @PageableDefault(page = 0, size = 10, sort = "postId", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(value = "keyword", required = false) String keyword) {
         Page<PostResponse> dtoList;
-        Page<Post> list= null;
+        Page<Post> list = null;
 
-        if(keyword==null){
-            list= postService.totalPostList(pageable);
-        }
-        else{
-            list= postService.searchKeyword(keyword,pageable);
+        User aptUser = userService.UserInfoWithPhone(user.getName());
+        Integer aptId = aptUser.getAptId();
+
+        if (keyword == null) {
+            list = postService.totalPostList(aptId, pageable);
+        } else {
+            list = postService.searchKeyword(aptId, keyword, pageable);
         }
 
-        dtoList = list.map(new Function< Post, PostResponse> (){
+        dtoList = list.map(new Function<Post, PostResponse>() {
 
             @Override
             public PostResponse apply(Post entity) {
@@ -67,10 +80,9 @@ public class PostController {
         return dtoList;
     }
 
-
-    //선택된 게시물 불러오기
+    // 선택된 게시물 불러오기
     @GetMapping("/select")
-    public PostResponse selectPost(@RequestParam("postId") Integer postId){
+    public PostResponse selectPost(@RequestParam("postId") Integer postId) {
 
         Post post = postService.getPost(postId);
         PostResponse dto = new PostResponse();
@@ -83,13 +95,14 @@ public class PostController {
         return dto;
     }
 
-
-    //선택된 게시물 삭제
+    // 선택된 게시물 삭제
     @DeleteMapping("/delete")
-    public Page<PostResponse> deletePost(@RequestParam("postId") Integer postId, @PageableDefault(page=0,size=10,sort="postId",direction= Sort.Direction.DESC) Pageable pageable) {
-
+    public Page<PostResponse> deletePost(@RequestParam("postId") Integer postId,
+            @PageableDefault(page = 0, size = 10, sort = "postId", direction = Sort.Direction.DESC) Pageable pageable) {
+        
+        int aptId = postService.getPost(postId).getAptId();
         postService.deletePost(postId);
-        Page<Post> list = postService.totalPostList(pageable);
+        Page<Post> list = postService.totalPostList(aptId, pageable);
         Page<PostResponse> dtoList;
 
         dtoList = list.map(new Function<Post, PostResponse>() {
@@ -108,4 +121,3 @@ public class PostController {
     }
 
 }
-

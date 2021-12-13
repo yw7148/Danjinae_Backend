@@ -8,6 +8,9 @@ import com.capstone.danjinae.post.entity.Comment;
 import com.capstone.danjinae.post.entity.Post;
 import com.capstone.danjinae.post.service.CommentService;
 import com.capstone.danjinae.post.service.PostService;
+import com.capstone.danjinae.user.entity.User;
+import com.capstone.danjinae.user.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.function.Function;
 
@@ -28,15 +32,20 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    //댓글 list show
+    @Autowired
+    private UserService userService;
+
+    // 댓글 list show
     @GetMapping("/list")
-    public Page<CommentResponse> list(@PageableDefault(page=0,size=10,sort="commentId",direction= Sort.Direction.DESC) Pageable pageable,@RequestParam("postId") Integer postId) {
+    public Page<CommentResponse> list(
+            @PageableDefault(page = 0, size = 10, sort = "commentId", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam("postId") Integer postId) {
         Page<CommentResponse> dtoList;
-        Page<Comment> list= null;
+        Page<Comment> list = null;
 
-        list= commentService.getComment(pageable);
+        list = commentService.getComment(pageable);
 
-        dtoList = list.map(new Function< Comment, CommentResponse>(){
+        dtoList = list.map(new Function<Comment, CommentResponse>() {
 
             @Override
             public CommentResponse apply(Comment entity) {
@@ -52,12 +61,16 @@ public class CommentController {
         return dtoList;
     }
 
-    //댓글 작성
+    // 댓글 작성
     @PostMapping("/add")
-    private Boolean comment(@RequestBody CommentRequest comment, @RequestParam("postId") Integer postId) {
+    private Boolean comment(Principal user, @RequestBody CommentRequest comment,
+            @RequestParam("postId") Integer postId) {
 
         Comment toadd;
         try {
+            User aptUser = userService.UserInfoWithPhone(user.getName());
+            comment.setUserId(aptUser.getId());
+
             toadd = Comment.builder().userId(comment.getUserId()).comment(comment.getComment()).build();
             commentService.write(postId, toadd);
 
@@ -67,4 +80,3 @@ public class CommentController {
         return true;
     }
 }
-

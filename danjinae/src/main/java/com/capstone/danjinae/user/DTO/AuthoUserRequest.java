@@ -11,6 +11,5 @@ public class AuthoUserRequest {
     private Integer aptId;
     private String impId;
     private String phone;
-    private String password;
 
 }

@@ -1,5 +1,6 @@
 package com.capstone.danjinae.Complaint.controller;
 
+import java.security.Principal;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.function.Function;
@@ -17,7 +18,9 @@ import com.capstone.danjinae.Complaint.service.ComplaintService;
 import com.capstone.danjinae.fcm.service.FcmPush;
 import com.capstone.danjinae.post.DTO.postDTO.PostResponse;
 import com.capstone.danjinae.post.entity.Post;
+import com.capstone.danjinae.user.entity.User;
 import com.capstone.danjinae.user.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.domain.Page;
@@ -44,11 +47,13 @@ public class ComplaintController {
     private FcmPush fcmPush;
 
     @PostMapping(value = "/add")
-    public Boolean addNewComplaint(@RequestBody NewComplaintRequest request) {
+    public Boolean addNewComplaint(Principal user, @RequestBody NewComplaintRequest request) {
         Complaint toadd;
         try {
-            toadd = Complaint.builder().content(request.getContent()).userId(request.getUserId())
-                    .aptId(request.getAptId()).build();
+            User aptUser = userService.UserInfoWithPhone(user.getName());
+
+            toadd = Complaint.builder().content(request.getContent()).userId(aptUser.getId())
+                    .aptId(aptUser.getAptId()).build();
 
             complaintService.write(toadd);
         } catch (Exception e) {
@@ -59,10 +64,11 @@ public class ComplaintController {
     }
 
     @PostMapping(value = "/addprocess")
-    public Boolean addNewCplProcess(@RequestBody NewCplProcessRequest request) throws UnsupportedEncodingException {
-        try {
-            ComplaintProcess toadd;
-
+    public Boolean addNewCplProcess(Principal user, @RequestBody NewCplProcessRequest request) {
+        ComplaintProcess toadd;
+        try{
+            User aptUser = userService.UserInfoWithPhone(user.getName());
+            request.setMgrId(aptUser.getId());
             toadd = ComplaintProcess.builder().content(request.getContent()).cplId(request.getCplId())
                     .mgrId(request.getMgrId()).state(request.getState()).build();
 
@@ -79,11 +85,14 @@ public class ComplaintController {
 
     @GetMapping(value = "/get/{aptid}")
     public Page<ComplaintListResponse> getManagerComplaintList(
+            Principal user,
             @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-            @PathVariable Integer aptid) {
+            @PathVariable(required = false) Integer aptid) {
 
         Page<ComplaintListResponse> list;
         try {
+            User aptUser = userService.UserInfoWithPhone(user.getName());
+            aptid = aptUser.getAptId();
             Page<Complaint> ettlist = complaintService.getManagerComplaint(aptid, pageable);
             list = ettlist.map(new Function<Complaint, ComplaintListResponse>() {
                 @Override

@@ -10,7 +10,8 @@ import org.springframework.stereotype.Repository;
 public interface PostRepository extends JpaRepository<Post, Integer> {
 
     //findBy(컬럼이름)Containing
-    Page<Post> findByTitleContaining(String keyword, Pageable pageable);
+    Page<Post> findByAptIdAndTitleContaining(Integer aptId,String keyword, Pageable pageable);
 
+    Page<Post> findByAptId(Integer aptId, Pageable pageable);
 }
 

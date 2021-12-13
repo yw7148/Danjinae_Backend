@@ -1,5 +1,6 @@
 package com.capstone.danjinae.MgFee.controller;
 
+import java.security.Principal;
 import java.util.function.Function;
 
 import com.capstone.danjinae.MgFee.DTO.ManagerMgFeeResponse;
@@ -7,6 +8,7 @@ import com.capstone.danjinae.MgFee.DTO.NewMgFeeRequest;
 import com.capstone.danjinae.MgFee.DTO.UserMgFeeResponse;
 import com.capstone.danjinae.MgFee.entity.MgFee;
 import com.capstone.danjinae.MgFee.service.MgFeeService;
+import com.capstone.danjinae.user.entity.User;
 import com.capstone.danjinae.user.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,11 +40,17 @@ public class MgFeeController {
 
     @GetMapping("/getmgfee")
     public Page<UserMgFeeResponse> userMgFeeList(
+            Principal user,
             @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(value = "userId") Integer userId, @RequestParam(value = "aptId") Integer aptId) {
+            @RequestParam(value = "userId", required = false) Integer userId,
+            @RequestParam(value = "aptId", required = false) Integer aptId) {
 
         Page<UserMgFeeResponse> dtolist;
         try {
+            User aptUser = userService.UserInfoWithPhone(user.getName());
+            userId = aptUser.getId();
+            aptId = aptUser.getAptId();
+
             Page<MgFee> entitylist = mgFeeService.getUserMgFeeList(userId, aptId, pageable);
 
             dtolist = entitylist.map(new Function<MgFee, UserMgFeeResponse>() {
@@ -68,11 +77,15 @@ public class MgFeeController {
 
     @GetMapping("/getmanagermgfee")
     public Page<ManagerMgFeeResponse> managerMgFeeList(
+            Principal user,
             @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(value = "aptId") Integer aptId) {
+            @RequestParam(value = "aptId", required = false) Integer aptId) {
 
         Page<ManagerMgFeeResponse> dtolist;
         try {
+            User aptUser = userService.UserInfoWithPhone(user.getName());
+            aptId = aptUser.getAptId();
+
             Page<MgFee> entitylist = mgFeeService.getManagerMgFeeList(aptId, pageable);
 
             dtolist = entitylist.map(new Function<MgFee, ManagerMgFeeResponse>() {
@@ -98,9 +111,12 @@ public class MgFeeController {
     }
 
     @PostMapping(value = "/setManagerMgFee")
-    public Boolean addNewMgFee(@RequestBody NewMgFeeRequest request) {
+    public Boolean addNewMgFee(Principal user, @RequestBody NewMgFeeRequest request) {
         MgFee toadd;
         try {
+            User aptUser = userService.UserInfoWithPhone(user.getName());
+            request.setAptId(aptUser.getAptId());
+
             var target = userService.getUserWithAddress(request.getAddress(), request.getAptId());
             toadd = MgFee.builder().fee(request.getFee()).userId(target.getId()).aptId(request.getAptId())
                     .catId(request.getCatId()).date(request.getDate()).content(request.getContent()).build();
