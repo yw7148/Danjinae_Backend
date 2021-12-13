@@ -1,5 +1,8 @@
 package com.capstone.danjinae.user.service;
 
+import com.capstone.danjinae.Complaint.entity.Complaint;
+import com.capstone.danjinae.Complaint.repository.ComplaintRepository;
+import com.capstone.danjinae.Complaint.service.ComplaintService;
 import com.capstone.danjinae.user.entity.User;
 import com.capstone.danjinae.user.entity.UserFCMToken;
 import com.capstone.danjinae.user.repository.UserFCMTokenRepository;
@@ -7,6 +10,8 @@ import com.capstone.danjinae.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -16,6 +21,12 @@ public class UserService {
 
     @Autowired
     private UserFCMTokenRepository userFCMTokenRepository;
+
+    @Autowired
+    private ComplaintRepository complaintRepository;
+
+    @Autowired
+    private ComplaintService complaintService;
 
     @Transactional
     public User writeUser(User user) {
@@ -40,5 +51,12 @@ public class UserService {
         userFCMTokenRepository.save(newToken);
 
         return true;
+    }
+
+    public String getToken (Integer cplid){
+
+        Complaint cpl = complaintService.getComplaint(cplid);
+        UserFCMToken userToken= userFCMTokenRepository.findAllByUserId(cpl.getUserId());
+        return userToken.getToken();
     }
 }
