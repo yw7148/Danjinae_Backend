@@ -2,6 +2,8 @@ package com.capstone.danjinae.Complaint.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 import com.capstone.danjinae.Complaint.DTO.ComplaintListResponse;
@@ -67,7 +69,8 @@ public class ComplaintController {
                     .mgrId(request.getMgrId()).state(request.getState()).build();
 
             complaintService.writeCplProcess(toadd);
-            String token = userService.getToken(request.getCplId());
+            List<String> token= new ArrayList<String>();
+            token.add(userService.getToken(request.getCplId()));
             String encodedContent = URLEncoder.encode(request.getContent(), "UTF-8");
             fcmPush.push(token, encodedContent);
             return true;

@@ -7,6 +7,7 @@ import com.capstone.danjinae.user.entity.User;
 import com.capstone.danjinae.user.entity.UserFCMToken;
 import com.capstone.danjinae.user.repository.UserFCMTokenRepository;
 import com.capstone.danjinae.user.repository.UserRepository;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,5 +63,10 @@ public class UserService {
 
     public List<User> findAllByAptId(Integer aptid){
         return userRepository.findAllByAptId(aptid);
+    }
+
+    public String getTokenByUserId(Integer userId){
+        UserFCMToken userToken= userFCMTokenRepository.findAllByUserId(userId);
+        return userToken.getToken();
     }
 }

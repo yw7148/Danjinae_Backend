@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -21,7 +22,7 @@ public class FcmPush {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public ResponseEntity<String> push(String token, String content) throws JSONException, InterruptedException, UnsupportedEncodingException {
+    public ResponseEntity<String> push(List<String> token, String content) throws JSONException, InterruptedException, UnsupportedEncodingException {
         String notification = FcmNotification.NotificationJson(token,content);
 
         HttpEntity<String> request = new HttpEntity<>(notification);

@@ -1,13 +1,19 @@
 package com.capstone.danjinae.notice.controller;
 
+import java.net.URLEncoder;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.function.Function;
 
+import com.capstone.danjinae.fcm.service.FcmPush;
 import com.capstone.danjinae.notice.DTO.NoticeListResponse;
 import com.capstone.danjinae.notice.DTO.NoticeRequest;
 import com.capstone.danjinae.notice.entity.Notice;
 import com.capstone.danjinae.notice.service.NoticeService;
+import com.capstone.danjinae.user.entity.User;
+import com.capstone.danjinae.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +29,12 @@ public class NoticeController {
     @Autowired
     private NoticeService noticeService;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private FcmPush fcmPush;
+
     // 공지사항 작성
     @PostMapping("/add")
     public Boolean postNotice(@RequestBody NoticeRequest notice) {
@@ -34,11 +46,23 @@ public class NoticeController {
                     .endDate(new Timestamp(notice.getEndDate().getTime())).catId(notice.getCatId()).build();
 
             noticeService.write(toadd);
+
+            List<User> aptUser= new ArrayList<User>();
+            aptUser= userService.findAllByAptId(notice.getAptId());
+
+            String encodedContent = URLEncoder.encode(notice.getContent(), "UTF-8");
+            List<String> token= new ArrayList<String>();
+
+            for(int i=0; i<aptUser.size();i++){
+                token.add(userService.getTokenByUserId(aptUser.get(i).getId()));
+            }
+
+            fcmPush.push(token,encodedContent);
+            return true;
+
         } catch (Exception e) {
             return false;
         }
-
-        return true;
     }
 
     private void setDefaultNoriceRequest(NoticeRequest input) {
