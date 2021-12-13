@@ -57,8 +57,6 @@ class NoticeApplicationTests {
 
     private NewComplaintRequest NewComplaint() {
         final NewComplaintRequest newComplaint = new NewComplaintRequest();
-        newComplaint.setAptId(1);
-        newComplaint.setUserId(1);
         newComplaint.setContent("TEST");
         return newComplaint;
     }

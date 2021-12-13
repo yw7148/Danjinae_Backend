@@ -235,7 +235,8 @@ public class VehicleController {
 
         try {
             Page<VehicleResponse> dtoList;
-            Page<Vehicle> list = vehicleService.UserInfoWithPhone(user.getName(), pageable);
+            User aptUser = userService.UserInfoWithPhone(user.getName());
+            Page<Vehicle> list = vehicleService.UserInfoWithUserId(aptUser.getId(), pageable);
 
             dtoList = list.map(new Function<Vehicle, VehicleResponse>() {
                 @Override

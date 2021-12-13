@@ -16,5 +16,5 @@ public interface VehicleRepository extends JpaRepository<Vehicle,Integer> {
 
     Page<Vehicle> findByAcceptAndAptId(Boolean accept, Integer aptId, Pageable pageable);
 
-    Page<Vehicle> findByPhone(String phone,Pageable pageable);
+    Page<Vehicle> findByUserId(Integer userId, Pageable pageable);
 }

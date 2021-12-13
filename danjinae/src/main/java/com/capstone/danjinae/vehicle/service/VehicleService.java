@@ -78,7 +78,7 @@ public class VehicleService {
         vehicleRepository.deleteById(id);
     }
 
-    public Page<Vehicle> UserInfoWithPhone(String phone,Pageable pageable) {
-        return vehicleRepository.findByPhone(phone,pageable);
+    public Page<Vehicle> UserInfoWithUserId(Integer userId,Pageable pageable) {
+        return vehicleRepository.findByUserId(userId, pageable);
     }
 }
