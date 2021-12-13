@@ -48,6 +48,10 @@ public class UserService {
 
     public Boolean UserNewFCMToken(Integer userId, String token)
     {
+        UserFCMToken fcmToken = userFCMTokenRepository.findByToken(token);
+        if(fcmToken != null)
+            userFCMTokenRepository.delete(fcmToken);
+            
         UserFCMToken newToken = UserFCMToken.builder().userId(userId).token(token).build();
         userFCMTokenRepository.save(newToken);
 

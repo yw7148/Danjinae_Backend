@@ -7,6 +7,4 @@ import lombok.Setter;
 @Setter
 public class NewComplaintRequest {
     private String content;
-    private Integer userId;
-    private Integer aptId;
 }

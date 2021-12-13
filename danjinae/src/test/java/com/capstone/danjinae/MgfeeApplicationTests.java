@@ -44,6 +44,5 @@ class MgfeeApplicationTests {
 		newMgFee.setFee(1000);
 		newMgFee.setAddress("101동101호");
 
-		Boolean result = mgFeeController.addNewMgFee(newMgFee);
 	}
 }

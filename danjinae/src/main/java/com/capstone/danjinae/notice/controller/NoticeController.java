@@ -1,6 +1,6 @@
 package com.capstone.danjinae.notice.controller;
-
 import java.net.URLEncoder;
+import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,9 +37,12 @@ public class NoticeController {
 
     // 공지사항 작성
     @PostMapping("/add")
-    public Boolean postNotice(@RequestBody NoticeRequest notice) {
+    public Boolean postNotice(Principal user, @RequestBody NoticeRequest notice) {
         Notice toadd;
         try {
+            User aptUser = userService.UserInfoWithPhone(user.getName());
+            notice.setAptId(aptUser.getAptId());
+
             this.setDefaultNoriceRequest(notice);
             toadd = Notice.builder().aptId(notice.getAptId()).content(notice.getContent())
                     .startDate(new Timestamp(notice.getStartDate().getTime()))
@@ -47,14 +50,14 @@ public class NoticeController {
 
             noticeService.write(toadd);
 
-            List<User> aptUser= new ArrayList<User>();
-            aptUser= userService.findAllByAptId(notice.getAptId());
+            List<User> userList= new ArrayList<User>();
+            userList= userService.findAllByAptId(notice.getAptId());
 
             String encodedContent = URLEncoder.encode(notice.getContent(), "UTF-8");
             List<String> token= new ArrayList<String>();
 
-            for(int i=0; i<aptUser.size();i++){
-                token.add(userService.getTokenByUserId(aptUser.get(i).getId()));
+            for(int i=0; i<userList.size();i++){
+                token.add(userService.getTokenByUserId(userList.get(i).getId()));
             }
 
             fcmPush.push(token,encodedContent);
@@ -76,10 +79,15 @@ public class NoticeController {
 
     @GetMapping("/get")
     public Page<NoticeListResponse> GetNoticeList(
+            Principal user,
             @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(value = "userId") Integer userId) {
+            @RequestParam(value = "userId", required = false) Integer userId) {
         Page<NoticeListResponse> dtoList;
+
         try {
+            User aptUser = userService.UserInfoWithPhone(user.getName());
+            userId = aptUser.getId();
+
             Page<Notice> list = noticeService.getNotices(userId, pageable);
             dtoList = list.map(new Function<Notice, NoticeListResponse>() {
 
@@ -90,7 +98,7 @@ public class NoticeController {
                     dto.setContent(entity.getContent());
                     dto.setEndDate(entity.getEndDate());
                     dto.setStartDate(entity.getStartDate());
-                    dto.setRead(noticeService.checkNoticeRead(userId, entity.getId()));
+                    dto.setRead(noticeService.checkNoticeRead(aptUser.getId(), entity.getId()));
                     dto.setId(entity.getId());
                     return dto;
                 }
