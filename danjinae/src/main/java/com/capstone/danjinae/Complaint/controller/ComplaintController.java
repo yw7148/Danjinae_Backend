@@ -15,6 +15,7 @@ import com.capstone.danjinae.Complaint.entity.Complaint;
 import com.capstone.danjinae.Complaint.entity.ComplaintProcess;
 import com.capstone.danjinae.Complaint.service.ComplaintService;
 
+import com.capstone.danjinae.fcm.service.FcmPush;
 import com.capstone.danjinae.post.DTO.postDTO.PostResponse;
 import com.capstone.danjinae.post.entity.Post;
 import com.capstone.danjinae.user.entity.User;
@@ -31,9 +32,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @RequestMapping("/complaint")
@@ -44,6 +42,9 @@ public class ComplaintController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private FcmPush fcmPush;
 
     @PostMapping(value = "/add")
     public Boolean addNewComplaint(Principal user, @RequestBody NewComplaintRequest request) {
@@ -63,7 +64,7 @@ public class ComplaintController {
     }
 
     @PostMapping(value = "/addprocess")
-    public ModelAndView addNewCplProcess(Principal user, @RequestBody NewCplProcessRequest request) {
+    public Boolean addNewCplProcess(Principal user, @RequestBody NewCplProcessRequest request) {
         ComplaintProcess toadd;
         try{
             User aptUser = userService.UserInfoWithPhone(user.getName());
@@ -72,17 +73,13 @@ public class ComplaintController {
                     .mgrId(request.getMgrId()).state(request.getState()).build();
 
             complaintService.writeCplProcess(toadd);
-            String token=userService.getToken(request.getCplId());
-            String encodedContent = URLEncoder.encode(request.getContent(),"UTF-8");
+            String token = userService.getToken(request.getCplId());
+            String encodedContent = URLEncoder.encode(request.getContent(), "UTF-8");
+            fcmPush.push(token, encodedContent);
+            return true;
 
-            String url= "/notice/push?token="+token+"&content="+encodedContent;
-
-            ModelAndView mav = new ModelAndView();
-            mav.setView(new RedirectView(url));
-            return mav;
-        }catch(Exception e)
-        {
-            return null;
+        }catch (Exception e) {
+            return false;
         }
     }
 

@@ -63,4 +63,8 @@ public class UserService {
         UserFCMToken userToken= userFCMTokenRepository.findAllByUserId(cpl.getUserId());
         return userToken.getToken();
     }
+
+    public List<User> findAllByAptId(Integer aptid){
+        return userRepository.findAllByAptId(aptid);
+    }
 }
