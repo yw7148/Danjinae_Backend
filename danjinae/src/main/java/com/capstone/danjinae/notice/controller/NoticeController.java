@@ -57,7 +57,7 @@ public class NoticeController {
             List<String> token= new ArrayList<String>();
 
             for(int i=0; i<userList.size();i++){
-                token.add(userService.getTokenByUserId(userList.get(i).getId()));
+                token.addAll(userService.getTokenByUserId(userList.get(i).getId()));
             }
 
             fcmPush.push(token,encodedContent);

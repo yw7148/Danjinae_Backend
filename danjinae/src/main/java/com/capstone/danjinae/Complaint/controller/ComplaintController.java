@@ -25,6 +25,7 @@ import com.capstone.danjinae.user.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -76,7 +77,7 @@ public class ComplaintController {
 
             complaintService.writeCplProcess(toadd);
             List<String> token= new ArrayList<String>();
-            token.add(userService.getToken(request.getCplId()));
+            token.addAll(userService.getToken(request.getCplId()));
             String encodedContent = URLEncoder.encode(request.getContent(), "UTF-8");
             fcmPush.push(token, encodedContent);
             return true;
@@ -87,6 +88,34 @@ public class ComplaintController {
     }
 
     @GetMapping(value = {"/get/{aptid}", "/get"})
+    public Page<ComplaintListResponse> getComplaintList(
+            Principal user,
+            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+            @PathVariable(required = false) Integer aptid) {
+
+        Page<ComplaintListResponse> list;
+        try {
+            User aptUser = userService.UserInfoWithPhone(user.getName());
+            Integer userId = aptUser.getId();
+            Page<Complaint> ettlist = complaintService.getComplaint(userId, pageable);
+            list = ettlist.map(new Function<Complaint, ComplaintListResponse>() {
+                @Override
+                public ComplaintListResponse apply(Complaint ett) {
+                    ComplaintListResponse dto = new ComplaintListResponse();
+                    dto.setContent(ett.getContent());
+                    dto.setCplId(ett.getId());
+                    return dto;
+                }
+            });
+        } catch (Exception e) {
+            return null;
+        }
+
+        return list;
+    }
+
+    @GetMapping(value = {"/getmanagerlist/{aptid}", "/getmanagerlist"})
+    @Secured("ROLE_MANAGER")
     public Page<ComplaintListResponse> getManagerComplaintList(
             Principal user,
             @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,

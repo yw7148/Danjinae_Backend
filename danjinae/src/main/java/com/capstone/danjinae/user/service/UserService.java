@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -58,19 +59,28 @@ public class UserService {
         return true;
     }
 
-    public String getToken (Integer cplid){
-
+    public List<String> getToken (Integer cplid){
         Complaint cpl = complaintService.getComplaint(cplid);
-        UserFCMToken userToken= userFCMTokenRepository.findAllByUserId(cpl.getUserId());
-        return userToken.getToken();
+        List<UserFCMToken> userToken= userFCMTokenRepository.findAllByUserId(cpl.getUserId());
+        
+        List<String> tokens = new ArrayList<String>(userToken.size());
+        for (UserFCMToken userFCMToken : userToken) {
+            tokens.add(userFCMToken.getToken());
+        }
+        return tokens;
     }
 
     public List<User> findAllByAptId(Integer aptid){
         return userRepository.findAllByAptId(aptid);
     }
 
-    public String getTokenByUserId(Integer userId){
-        UserFCMToken userToken= userFCMTokenRepository.findAllByUserId(userId);
-        return userToken.getToken();
+    public List<String> getTokenByUserId(Integer userId){
+        List<UserFCMToken> userToken= userFCMTokenRepository.findAllByUserId(userId);
+        List<String> tokens = new ArrayList<String>(userToken.size());
+        for (UserFCMToken userFCMToken : userToken) {
+            tokens.add(userFCMToken.getToken());
+        }
+
+        return tokens;
     }
 }

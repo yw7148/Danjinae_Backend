@@ -12,5 +12,5 @@ public interface UserFCMTokenRepository extends JpaRepository<UserFCMToken, Inte
     //List<UserFCMToken> findAllByUserId(Integer userId);
     
     UserFCMToken findByToken(String token);
-    UserFCMToken findAllByUserId(Integer userId);
+    List<UserFCMToken> findAllByUserId(Integer userId);
 }

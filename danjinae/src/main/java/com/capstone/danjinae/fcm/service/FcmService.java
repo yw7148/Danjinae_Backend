@@ -1,10 +1,12 @@
 package com.capstone.danjinae.fcm.service;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -21,6 +23,7 @@ public class FcmService {
 
         ArrayList<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
 
+        restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
         interceptors.add(new FcmInterceptor("Authorization", "key=" + firebase_server_key));
         interceptors.add(new FcmInterceptor("Content-Type", "application/json; UTF-8 "));
         restTemplate.setInterceptors(interceptors);

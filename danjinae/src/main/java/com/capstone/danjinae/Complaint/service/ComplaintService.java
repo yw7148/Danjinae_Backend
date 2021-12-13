@@ -42,6 +42,11 @@ public class ComplaintService {
         return cplProcessRepository.findByCplId(cplId, pageable);
     }
 
+    public Page<Complaint> getComplaint(Integer userid, Pageable pageable)
+    {
+        return complaintRepository.findByUserId(userid, pageable);
+    }
+
     public Page<Complaint> getManagerComplaint(Integer aptid, Pageable pageable) {
 
         return complaintRepository.findByAptId(aptid, pageable);
