@@ -28,8 +28,9 @@ public class CommentService {
     private CommentService commentService;
 
     @Transactional
-    public Page<Comment> getComment(Pageable pageable){
-        return commentRepository.findAll(pageable);
+    public Page<Comment> getComment(Integer postId, Pageable pageable){
+        Post post = postRepository.getById(postId);
+        return commentRepository.findCommentsByPost(post ,pageable);
     }
 
     @Transactional

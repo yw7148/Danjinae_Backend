@@ -43,7 +43,7 @@ public class CommentController {
         Page<CommentResponse> dtoList;
         Page<Comment> list = null;
 
-        list = commentService.getComment(pageable);
+        list = commentService.getComment(postId, pageable);
 
         dtoList = list.map(new Function<Comment, CommentResponse>() {
 
