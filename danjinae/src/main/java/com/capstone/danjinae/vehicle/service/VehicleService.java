@@ -1,6 +1,7 @@
 package com.capstone.danjinae.vehicle.service;
 
 import com.capstone.danjinae.post.entity.Post;
+import com.capstone.danjinae.user.entity.User;
 import com.capstone.danjinae.vehicle.controller.VehicleController;
 import com.capstone.danjinae.vehicle.entity.Vehicle;
 import com.capstone.danjinae.vehicle.repository.VehicleRepository;
@@ -77,4 +78,7 @@ public class VehicleService {
         vehicleRepository.deleteById(id);
     }
 
+    public Page<Vehicle> UserInfoWithPhone(String phone,Pageable pageable) {
+        return vehicleRepository.findByPhone(phone,pageable);
+    }
 }

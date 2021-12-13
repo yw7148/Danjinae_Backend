@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserFCMTokenRepository extends JpaRepository<UserFCMToken, Integer>{
-    List<UserFCMToken> findAllByUserId(Integer userId);
+    //List<UserFCMToken> findAllByUserId(Integer userId);
+    
     UserFCMToken findByToken(String token);
+    UserFCMToken findAllByUserId(Integer userId);
 }

@@ -1,6 +1,8 @@
 package com.capstone.danjinae.Complaint.controller;
 
 import java.security.Principal;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.function.Function;
 
 import com.capstone.danjinae.Complaint.DTO.ComplaintListResponse;
@@ -30,6 +32,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @RequestMapping("/complaint")
@@ -46,11 +50,9 @@ public class ComplaintController {
         Complaint toadd;
         try {
             User aptUser = userService.UserInfoWithPhone(user.getName());
-            request.setAptId(aptUser.getAptId());
-            request.setUserId(aptUser.getId());
 
-            toadd = Complaint.builder().content(request.getContent()).userId(request.getUserId())
-                    .aptId(request.getAptId()).build();
+            toadd = Complaint.builder().content(request.getContent()).userId(aptUser.getId())
+                    .aptId(aptUser.getAptId()).build();
 
             complaintService.write(toadd);
         } catch (Exception e) {
@@ -61,20 +63,27 @@ public class ComplaintController {
     }
 
     @PostMapping(value = "/addprocess")
-    public Boolean addNewCplProcess(Principal user, @RequestBody NewCplProcessRequest request) {
+    public ModelAndView addNewCplProcess(Principal user, @RequestBody NewCplProcessRequest request) {
         ComplaintProcess toadd;
-        try {
+        try{
             User aptUser = userService.UserInfoWithPhone(user.getName());
             request.setMgrId(aptUser.getId());
             toadd = ComplaintProcess.builder().content(request.getContent()).cplId(request.getCplId())
                     .mgrId(request.getMgrId()).state(request.getState()).build();
 
             complaintService.writeCplProcess(toadd);
-        } catch (Exception e) {
-            return false;
-        }
+            String token=userService.getToken(request.getCplId());
+            String encodedContent = URLEncoder.encode(request.getContent(),"UTF-8");
 
-        return true;
+            String url= "/notice/push?token="+token+"&content="+encodedContent;
+
+            ModelAndView mav = new ModelAndView();
+            mav.setView(new RedirectView(url));
+            return mav;
+        }catch(Exception e)
+        {
+            return null;
+        }
     }
 
     @GetMapping(value = "/get/{aptid}")

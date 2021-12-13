@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CplProcessRepository extends JpaRepository<ComplaintProcess, Integer> {
     Page<ComplaintProcess> findByCplId(Integer cplId, Pageable pageable);
+
+
 }

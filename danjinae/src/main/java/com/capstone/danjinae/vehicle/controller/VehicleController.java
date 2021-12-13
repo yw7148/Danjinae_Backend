@@ -228,5 +228,35 @@ public class VehicleController {
         });
         return dtoList;
     }
+
+    //내가 추가한 차량 리스트
+    @GetMapping("/myvehicle")
+    public Page<VehicleResponse> myVehicle(Principal user, @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+
+        try {
+            Page<VehicleResponse> dtoList;
+            Page<Vehicle> list = vehicleService.UserInfoWithPhone(user.getName(), pageable);
+
+            dtoList = list.map(new Function<Vehicle, VehicleResponse>() {
+                @Override
+                public VehicleResponse apply(Vehicle entity) {
+                    VehicleResponse dto = new VehicleResponse();
+                    dto.setVehicleId(entity.getId());
+                    dto.setUserId(entity.getUserId());
+                    dto.setPhone(entity.getPhone());
+                    dto.setGuest(entity.getGuest());
+                    dto.setStartDate(entity.getStartDate());
+                    dto.setEndDate(entity.getEndDate());
+                    dto.setNumber(entity.getNumber());
+                    return dto;
+                }
+            });
+            return dtoList;
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }
 

@@ -68,6 +68,7 @@ public class UserController {
     public Boolean inputUser(@RequestBody UserRequest user) {
         try {
             User toadd;
+
             User mgr = userService.getUser(user.getMgrId());
             toadd = User.builder().aptId(mgr.getAptId()).name(user.getName()).address(user.getAddress())
                     .birth(new Timestamp(user.getBirth().getTime())).phone(user.getPhone()).build();
@@ -135,6 +136,7 @@ public class UserController {
 
     @PutMapping("/signup")
     public Boolean SignUp(@RequestBody LoginUserRequest request) {
+
         try {
             return loginService.SignUpUser(request.getPhone(), request.getPassword());
         } catch (Exception e) {
