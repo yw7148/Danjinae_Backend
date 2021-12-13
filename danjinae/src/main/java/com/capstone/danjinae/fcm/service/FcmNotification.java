@@ -30,7 +30,7 @@ public class FcmNotification {
         body.put("registration_ids", arr);
 
         JSONObject notification = new JSONObject();
-        notification.put("title", "NOTIFICATION");
+        notification.put("title", "새로운 알림이 도착했습니다.");
         notification.put("body",  URLDecoder.decode(content, "UTF-8"));
 
         body.put("notification", notification);
