@@ -162,7 +162,7 @@ public class VehicleController {
 
     //내가 추가한 차량 리스트
     @GetMapping("/myvehicle")
-    public Page<VehicleResponse> myInfo(Principal user, @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    public Page<VehicleResponse> myVehicle(Principal user, @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
         try {
             Page<VehicleResponse> dtoList;
