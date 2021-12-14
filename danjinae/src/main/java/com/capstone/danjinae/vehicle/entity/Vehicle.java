@@ -42,6 +42,7 @@ public class Vehicle {
     //set guest
     public void guest() {
         guest=true;
+        accept=false;
     }
 
     public void resident() {
