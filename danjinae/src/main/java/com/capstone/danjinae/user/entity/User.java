@@ -62,4 +62,8 @@ public class User {
     public void Manager() {
         this.role = UserRole.ROLE_MANAGER;
     }
+
+    public void MangerRequest() {
+        this.role = UserRole.ROLE_NOT_PERMITTED;
+    }
 }

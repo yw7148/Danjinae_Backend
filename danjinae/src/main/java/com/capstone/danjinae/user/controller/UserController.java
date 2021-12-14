@@ -6,6 +6,7 @@ import com.capstone.danjinae.user.DTO.AddUserRequest;
 import com.capstone.danjinae.user.DTO.AptListResponse;
 import com.capstone.danjinae.user.DTO.AuthoUserRequest;
 import com.capstone.danjinae.user.DTO.FCMToken;
+import com.capstone.danjinae.user.DTO.JoinRequest;
 import com.capstone.danjinae.user.DTO.LoginUserRequest;
 import com.capstone.danjinae.user.DTO.UserInfo;
 import com.capstone.danjinae.user.DTO.UserRequest;
@@ -71,7 +72,7 @@ public class UserController {
     public Boolean inputUser(Principal loginUser, @RequestBody UserRequest user) {
         try {
             User toadd;
-            User aptUser = userService.UserInfoWithPhone(user.getName());
+            User aptUser = userService.UserInfoWithPhone(loginUser.getName());
 
             User mgr = userService.getUser(aptUser.getId());
 
@@ -150,6 +151,26 @@ public class UserController {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @PostMapping("/joinmanager")
+    public Boolean JoinManager(@RequestBody JoinRequest user) {
+        try {
+            User toadd;
+
+            toadd = User.builder().aptId(user.getAptId()).name(user.getName())
+                    .phone(user.getPhone()).build();
+            
+            loginService.SignUpUser(user.getPhone(), user.getPassword());
+            toadd.MangerRequest();
+
+            User addedUser = userService.writeUser(toadd);
+
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
     }
 
     @PostMapping("/login")
