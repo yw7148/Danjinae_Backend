@@ -22,4 +22,5 @@ public class VehicleResponse {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date endDate;
     private String number; // 차량 번호
+    private boolean accept;
 }

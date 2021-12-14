@@ -33,9 +33,12 @@ public class PostController {
 
     // 게시물 등록
     @PostMapping("/add")
-    public Boolean post(@RequestBody PostRequest post) {
+    public Boolean post(Principal user, @RequestBody PostRequest post) {
         Post toadd;
+        
         try {
+            User aptUser = userService.UserInfoWithPhone(user.getName());
+            post.setAptId(aptUser.getAptId());
             toadd = Post.builder().title(post.getTitle()).content(post.getContent()).userId(post.getUserId())
                     .aptId(post.getAptId()).build();
 

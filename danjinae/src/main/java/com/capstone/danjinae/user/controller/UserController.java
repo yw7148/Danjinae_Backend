@@ -68,11 +68,13 @@ public class UserController {
     // 입주민 등록
     @Secured(value = "ROLE_MANAGER")
     @PostMapping("/add")
-    public Boolean inputUser(@RequestBody UserRequest user) {
+    public Boolean inputUser(Principal loginUser, @RequestBody UserRequest user) {
         try {
             User toadd;
+            User aptUser = userService.UserInfoWithPhone(user.getName());
 
-            User mgr = userService.getUser(user.getMgrId());
+            User mgr = userService.getUser(aptUser.getId());
+
             toadd = User.builder().aptId(mgr.getAptId()).name(user.getName()).address(user.getAddress())
                     .birth(new Timestamp(user.getBirth().getTime())).phone(user.getPhone()).build();
             toadd.Resident();

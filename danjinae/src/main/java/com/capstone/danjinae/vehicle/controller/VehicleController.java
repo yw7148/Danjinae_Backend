@@ -41,7 +41,8 @@ public class VehicleController {
         try {
             User aptUser = userService.UserInfoWithPhone(user.getName());
             Integer aptId = aptUser.getAptId();
-            toadd = Vehicle.builder().userId(vehicle.getUserId()).phone(vehicle.getPhone())
+            Integer userId = aptUser.getId();
+            toadd = Vehicle.builder().userId(userId).phone(vehicle.getPhone())
                     .startDate(new Timestamp(vehicle.getStartDate().getTime())).aptId(aptId)
                     .endDate(new Timestamp(vehicle.getEndDate().getTime())).number(vehicle.getNumber()).build();
 
@@ -62,7 +63,9 @@ public class VehicleController {
         try {
             User aptUser = userService.UserInfoWithPhone(user.getName());
             Integer aptId = aptUser.getAptId();
-            toadd = Vehicle.builder().userId(vehicle.getUserId()).phone(vehicle.getPhone())
+            Integer userId = aptUser.getId();
+
+            toadd = Vehicle.builder().userId(userId).phone(vehicle.getPhone())
                     .startDate(new Timestamp(vehicle.getStartDate().getTime())).aptId(aptId)
                     .endDate(new Timestamp(vehicle.getEndDate().getTime())).number(vehicle.getNumber()).build();
 
@@ -249,6 +252,7 @@ public class VehicleController {
                     dto.setStartDate(entity.getStartDate());
                     dto.setEndDate(entity.getEndDate());
                     dto.setNumber(entity.getNumber());
+                    dto.setAccept(entity.getAccept());
                     return dto;
                 }
             });
