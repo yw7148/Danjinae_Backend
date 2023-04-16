@@ -24,10 +24,14 @@
  - jdk 11
  - firebase
  - mariaDB
- 
+
 ### Android Application
  - Kotlin
  - Android Studio
+
+### CICD
+ - Jenkins
+ 
 
 ## Before Start
 
