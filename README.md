@@ -1,4 +1,6 @@
-> 스마트한 아파트 관리 서비스 '단지네'의 WAS (Backend) 관리 리포지토리입니다.
+> *forked from https://github.com/Danjinae/Backend*
+
+> 스마트한 아파트 관리 서비스 '단지네'의 WAS (Backend) 관리 리포지토리입니다.  
 
 <h1>2021 Brain 팀 프로젝트: 단지네</h1>
 
@@ -12,15 +14,20 @@
 
 ## Environment
 ### Web Server (Frontend)
- - spring boot 2
+ - spring boot 2 - java
  - jdk 11
+ - html, css, js
+ - bootstrap 5.1
+
 ### WAS (Backend)
  - spring boot 2
  - jdk 11
  - firebase
  - mariaDB
+ 
 ### Android Application
  - Kotlin
+ - Android Studio
 
 ## Before Start
 
