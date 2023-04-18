@@ -62,6 +62,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             if (refreshToken != null) {
                 refreshJwt = refreshToken;
             }
+        } catch(NullPointerException e) {
+            
         } catch (Exception e) {
             e.printStackTrace();
         }

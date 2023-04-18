@@ -161,12 +161,12 @@ public class UserController {
             toadd = User.builder().aptId(user.getAptId()).name(user.getName())
                     .phone(user.getPhone()).build();
             
-            loginService.SignUpUser(user.getPhone(), user.getPassword());
             toadd.MangerRequest();
-
             User addedUser = userService.writeUser(toadd);
 
+            loginService.SignUpUser(user.getPhone(), user.getPassword());
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
 

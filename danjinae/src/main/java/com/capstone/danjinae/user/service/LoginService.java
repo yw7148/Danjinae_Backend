@@ -68,8 +68,6 @@ public class LoginService {
         User newUser = userRepository.findByPhone(phone);
         String salt = genSalt();
         Salt newSalt = Salt.builder().salt(salt).build();
-        System.out.println(salt);
-        System.out.println(encodePassword(salt, password));
         newUser.passwordSalt(newSalt, encodePassword(salt, password));
         userRepository.save(newUser);
 

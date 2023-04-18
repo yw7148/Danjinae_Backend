@@ -31,24 +31,26 @@
 
 ### CICD
  - Jenkins
- 
+
 
 ## Before Start
 
 ### WAS (Backend)
-src/main/resources/application.properties
+src/main/resources/application.yml
 ```
-#DataBase Setting
-spring.datasource.url=
-spring.datasource.username=
-spring.datasource.password=
+spring.datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: ${DB_USER}
+    password: ${DB_PW}
+    url: ${DB_URL}
 
 #JWT secret
-spring.jwt.secret=
+spring.jwt.secret: ${JWT_SECRET}
 
 #Iamport secret
-spring.iamport.restapi= 
-spring.iamport.restapisecret= 
+spring.iamport:
+    restapi: ${IAMPORT_API}
+    restapisecret: ${IAMPORT_SECRET}
 ```
 
 ## Build
